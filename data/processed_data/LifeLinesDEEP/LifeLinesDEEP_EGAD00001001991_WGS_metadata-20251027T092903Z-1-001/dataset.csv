@@ -1,0 +1,2 @@
+accession_id,title,description,dataset_types,technologies,num_samples,access_type,extra_attributes,is_in_beacon,is_released,released_date,is_deprecated,policy_accession_id,submission_accession_id,created_at,edited_at
+EGAD00001001991,LifeLines-DEEP Gut MGS,"Meta-genomic sequencing of 1,200 LifeLines-DEEP participants",,"{""Illumina HiSeq 2000""}",1135,controlled,,f,t,2016-06-16 00:00:00+02,f,EGAP00001000447,EGA00001253468,2016-03-30 17:49:44+02,2025-04-14 23:11:29.412701+02
