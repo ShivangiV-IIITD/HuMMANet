@@ -1,0 +1,30 @@
+study_name,Age,BMI,seq_type,country,Gender,age_category,body_site,diseaseCat,cohort_life_style,MetabolomicsType,Metabolomics_body_site,Subject_ID,diseaseCat_clean,longitudinal,sample_id,Run
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_10,,no,HC_10,SRR14792573
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_39,,no,HC_39,SRR14792583
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_36,,no,HC_36,SRR14792586
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_34,,no,HC_34,SRR14792588
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_32,,no,HC_32,SRR14792590
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_30,,no,HC_30,SRR14792593
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_28,,no,HC_28,SRR14792595
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_25,,no,HC_25,SRR14792598
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_23,,no,HC_23,SRR14792600
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_21,,no,HC_21,SRR14792602
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_19,,no,HC_19,SRR14792605
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_17,,no,HC_17,SRR14792607
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_14,,no,HC_14,SRR14792610
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_12,,no,HC_12,SRR14792612
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_8,,no,HC_8,SRR14792620
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_11,,no,LC_11,SRR14792641
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Healthy,IndustrializedUrban,untargeted,fecal,HC_6,,no,HC_6,SRR14792642
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_9,,no,LC_9,SRR14792644
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_7,,no,LC_7,SRR14792646
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_5,,no,LC_5,SRR14792648
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_40,,no,LC_40,SRR14792576
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_38,,no,LC_38,SRR14792578
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_35,,no,LC_35,SRR14792617
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_33,,no,LC_33,SRR14792618
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_24,,no,LC_24,SRR14792628
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_22,,no,LC_22,SRR14792630
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_20,,no,LC_20,SRR14792633
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_18,,no,LC_18,SRR14792635
+FengZ_2021,,,16S,China,,Adult/Senior,stool,Lung Cancer,IndustrializedUrban,untargeted,fecal,LC_16,,no,LC_16,SRR14792637
