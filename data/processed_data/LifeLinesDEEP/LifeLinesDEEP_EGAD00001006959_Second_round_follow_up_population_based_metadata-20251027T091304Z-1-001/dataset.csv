@@ -1,2 +1,0 @@
-accession_id,title,description,dataset_types,technologies,num_samples,access_type,extra_attributes,is_in_beacon,is_released,released_date,is_deprecated,policy_accession_id,submission_accession_id,created_at,edited_at
-EGAD00001006959,LifeLines-DEEP 4 years follow-up 338 MGS,Second round of follow-up of population-based LifeLines-DEEP cohort,"{""Whole genome sequencing""}","{""Illumina HiSeq 2000""}",676,controlled,,f,t,2001-01-01 00:00:00+01,f,EGAP00001001946,EGA00001829284,2021-02-10 18:34:42+01,2025-04-14 23:16:51.638566+02

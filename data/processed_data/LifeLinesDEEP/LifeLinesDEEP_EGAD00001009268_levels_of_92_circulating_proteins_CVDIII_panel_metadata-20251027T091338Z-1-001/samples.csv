@@ -1,2 +1,0 @@
-accession_id,alias,title,description,biological_sex,subject_id,phenotype,extra_attributes,submission_accession_id,created_at,edited_at
-EGAN00003619558,All_samples,LLD_CVDIII_olink_samples,Table that contains Olink CVDIII measures for all LifeLines samples,unknown,LLD_proteomics,population,"[{""tag"": ""ENA-CHECKLIST"", ""unit"": null, ""value"": ""ERC000026""}, {""tag"": ""biosample_id"", ""value"": ""SAMEA110666771""}]",EGA00002257434,2022-08-17 10:46:37+02,2023-06-15 14:59:12.455849+02
