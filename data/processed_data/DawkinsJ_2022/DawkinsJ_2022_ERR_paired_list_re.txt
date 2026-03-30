@@ -1,2 +1,0 @@
-ERR4158202_1.fastq.gz	ERR4158202_2.fastq.gz	ERR4158202
-

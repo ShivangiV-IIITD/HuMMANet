@@ -6,6 +6,21 @@ MODALITY_PATTERNS <- c(
   metabolome = "CuratedMetabolome\\.csv$"
 )
 
+path_relative_to <- function(path, base_dir) {
+  p <- normalizePath(path, mustWork = TRUE)
+  b <- normalizePath(base_dir, mustWork = TRUE)
+  prefix <- paste0(b, .Platform$file.sep)
+
+  if (p == b) {
+    return(".")
+  }
+  if (startsWith(p, prefix)) {
+    return(substring(p, nchar(prefix) + 1L))
+  }
+
+  basename(p)
+}
+
 normalize_key <- function(x) {
   gsub("[^a-z0-9]+", "", tolower(x))
 }
@@ -185,6 +200,7 @@ format_study <- function(
   output_root,
   study_slug = NULL,
   studies_subdir = "studies_tmp",
+  project_root = getwd(),
   verbose = TRUE
 ) {
   study <- basename(study_dir)
@@ -236,7 +252,7 @@ format_study <- function(
     record[[paste0(modality, "_file")]] <- rel_path
     record[[paste0("n_", modality)]] <- nrow(table)
     record[[paste0("has_", modality)]] <- TRUE
-    record[[paste0(modality, "_source")]] <- normalizePath(input, mustWork = TRUE)
+    record[[paste0(modality, "_source")]] <- path_relative_to(input, project_root)
     sample_sets[[modality]] <- unique(table$sample_id)
   }
 
@@ -274,6 +290,7 @@ format_study <- function(
 format_all_studies <- function(
   source_dir = file.path("data", "processed_data"),
   output_dir = file.path("inst", "extdata"),
+  project_root = getwd(),
   verbose = TRUE
 ) {
   source_dir <- normalizePath(source_dir, mustWork = TRUE)
@@ -303,6 +320,7 @@ format_all_studies <- function(
         output_root = output_dir,
         study_slug = slug,
         studies_subdir = "studies_tmp",
+        project_root = project_root,
         verbose = verbose
       )
     },
@@ -339,7 +357,12 @@ main <- function() {
   args <- commandArgs(trailingOnly = TRUE)
   source_dir <- if (length(args) >= 1) args[[1]] else file.path("data", "processed_data")
   output_dir <- if (length(args) >= 2) args[[2]] else file.path("inst", "extdata")
-  format_all_studies(source_dir = source_dir, output_dir = output_dir, verbose = TRUE)
+  format_all_studies(
+    source_dir = source_dir,
+    output_dir = output_dir,
+    project_root = getwd(),
+    verbose = TRUE
+  )
 }
 
 if (sys.nframe() == 0) {

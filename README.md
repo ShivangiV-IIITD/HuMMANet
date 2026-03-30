@@ -28,7 +28,7 @@ This reads `data/processed_data/` and writes normalized files to
 
 ```r
 # if using remotes
-remotes::install_github("YOUR_ORG/Microbiome_Metabolome_Curated_Studies")
+remotes::install_github("Shivi-Verma29/Microbiome_Metabolome_Curated_Studies")
 ```
 
 ## Use
@@ -59,4 +59,3 @@ subset_data <- curatedMicrobiomeMetabolomeData(
 - Raw source files remain in `data/processed_data/`.
 - The formatter keeps file names and study boundaries deterministic and
   handles the common "first unnamed column as sample_id" CSV pattern.
-
