@@ -1,0 +1,17 @@
+Package: curatedMicrobiomeMetabolomeData
+Type: Package
+Title: Curated Human Microbiome-Metabolome Study Data
+Version: 0.1.0
+Authors@R:
+    person("HuMANet", "Consortium", email = "maintainer@example.org", role = c("aut", "cre"))
+Description: Curated microbiome and metabolome tables across human studies,
+    packaged with a simple API inspired by curatedMetagenomicData.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: false
+Imports:
+    utils
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+

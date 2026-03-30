@@ -1,0 +1,8 @@
+^ReadMe\.txt$
+^data/processed_data$
+^data/processed_data/
+^\.gitignore$
+^\.Rhistory$
+^\.RData$
+^data-raw$
+
