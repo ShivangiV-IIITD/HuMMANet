@@ -1,60 +1,73 @@
 # curatedMicrobiomeMetabolomeData
 
-This repository is now structured as an R package for curated human
-Gut-Microbiome–Metabolome-Compendium studies.
-
-## What this package provides
-
-- A normalized `inst/extdata` data layout for each study:
-  - `metadata.csv.gz`
-  - `species.csv.gz`
-  - `metabolome.csv.gz`
-- A study-level index at `inst/extdata/study_index.csv`
-- R helpers to list studies and load study modalities
-
-## Build normalized package data
-
-From the repository root:
-
-```bash
-Rscript data-raw/format_study_data.R
-```
-
-This reads `data/processed_data/` and writes normalized files to
-`inst/extdata/`.
+R package for the Gut-Microbiome–Metabolome-Compendium resource.
 
 ## Install
 
 ```r
-# if using remotes
+install.packages("remotes")
 remotes::install_github("Shivi-Verma29/Microbiome_Metabolome_Curated_Studies")
 ```
 
-## Use
+## Quick start
 
 ```r
 library(curatedMicrobiomeMetabolomeData)
 
-# Inspect studies
+# list all studies
 studies <- GMMC_studies()
+length(studies)
 head(studies)
 
-# Load one study (all available modalities)
-one <- GMMC_load_study("FranzosaE_2019")
-names(one)
+# inspect full study index
+idx <- GMMC_study_index()
+head(idx[, c("study", "has_metadata", "has_species", "has_metabolome")])
 
-# Load one modality only
-meta <- GMMC_load_modality("FranzosaE_2019", "metadata")
+# check available modalities for one study
+GMMC_available_modalities("DawkinsJ_2022")
 
-# Load multiple studies
+# load one modality
+meta <- GMMC_load_modality("DawkinsJ_2022", "metadata")
+dim(meta)
+
+# load one full study
+one_study <- GMMC_load_study("DawkinsJ_2022")
+names(one_study)
+
+# load selected studies and modalities
 subset_data <- curatedMicrobiomeMetabolomeData(
-  studies = c("FranzosaE_2019", "LifelinesDEEP_WGS"),
+  studies = c("DawkinsJ_2022", "FranzosaE_2019"),
   modalities = c("metadata", "metabolome")
 )
+names(subset_data)
 ```
 
-## Notes
+## Data structure
 
-- Raw source files remain in `data/processed_data/`.
-- The formatter keeps file names and study boundaries deterministic and
-  handles the common "first unnamed column as sample_id" CSV pattern.
+Each study can contain up to three tables:
+
+- `metadata`
+- `species`
+- `metabolome`
+
+Internally these are stored in `inst/extdata/studies/<study_slug>/` as gzipped
+CSV files, and indexed by `inst/extdata/study_index.csv`.
+
+## Main functions
+
+- `GMMC_study_index()`: returns the study-level index table.
+- `GMMC_studies()`: returns study names.
+- `GMMC_available_modalities(study)`: returns available modalities for a study.
+- `GMMC_load_modality(study, modality)`: loads one table as a `data.frame`.
+- `GMMC_load_study(study)`: loads all available tables for one study.
+- `curatedMicrobiomeMetabolomeData(studies, modalities)`: loads a multi-study
+  named list.
+
+## Using from a local checkout
+
+If you are running from a cloned repository without installing:
+
+```r
+ext_dir <- file.path(getwd(), "inst", "extdata")
+idx <- GMMC_study_index(extdata_dir = ext_dir)
+```
