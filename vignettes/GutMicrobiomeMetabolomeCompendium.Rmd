@@ -1,0 +1,109 @@
+---
+title: "GutMicrobiomeMetabolomeCompendium"
+author: "Nalin Arora, Shivangi Verma"
+date: "`r Sys.Date()`"
+output:
+  BiocStyle::html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{GutMicrobiomeMetabolomeCompendium}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+`GutMicrobiomeMetabolomeCompendium` provides curated study-level tables for:
+
+- metadata
+- species profiles
+- metabolome profiles
+
+The package includes helper functions to list studies, inspect available
+modalities, and load one or more studies into R.
+
+## Installation
+
+From Bioconductor:
+
+```{r eval = FALSE}
+if (!require("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("GutMicrobiomeMetabolomeCompendium")
+```
+
+Development version from GitHub:
+
+```{r eval = FALSE}
+install.packages("remotes")
+remotes::install_github(
+    "Shivi-Verma29/Microbiome_Metabolome_Curated_Studies"
+)
+```
+
+## Load the package
+
+```{r}
+library(GutMicrobiomeMetabolomeCompendium)
+```
+
+## Discover available studies
+
+```{r}
+studies <- GMMC_studies()
+length(studies)
+head(studies)
+```
+
+## Inspect the study index
+
+```{r}
+idx <- GMMC_study_index()
+head(idx[, c("study", "has_metadata", "has_species", "has_metabolome")])
+```
+
+## Load one study
+
+```{r}
+study_id <- idx$study[[1]]
+available <- GMMC_available_modalities(study_id)
+available
+
+one_study <- GMMC_load_study(study_id)
+names(one_study)
+```
+
+## Load one modality
+
+```{r}
+meta <- GMMC_load_modality(study_id, "metadata")
+dim(meta)
+head(meta[, seq_len(min(6, ncol(meta)))])
+```
+
+## Load multiple studies and modalities
+
+```{r}
+selected_studies <- studies[seq_len(min(2, length(studies)))]
+multi <- GutMicrobiomeMetabolomeCompendium(
+    studies = selected_studies,
+    modalities = c("metadata", "metabolome")
+)
+
+names(multi)
+names(multi[[1]])
+```
+
+## Session information
+
+```{r}
+sessionInfo()
+```

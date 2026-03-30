@@ -17,5 +17,9 @@ LazyData: false
 Imports:
     utils
 Suggests:
+    BiocStyle,
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
+VignetteBuilder: knitr
 Config/testthat/edition: 3
