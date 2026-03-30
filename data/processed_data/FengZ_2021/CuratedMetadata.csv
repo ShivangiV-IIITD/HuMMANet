@@ -1,30 +1,30 @@
-"","study_name","Age","BMI","seq_type","country","Gender","age_category","body_site","diseaseCat","cohort_life_style","MetabolomicsType","Metabolomics_body_site","Subject_ID","diseaseCat_clean","longitudinal","sample_id"
-"HC_10","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_10","Healthy","No","HC_10"
-"HC_39","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_39","Healthy","No","HC_39"
-"HC_36","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_36","Healthy","No","HC_36"
-"HC_34","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_34","Healthy","No","HC_34"
-"HC_32","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_32","Healthy","No","HC_32"
-"HC_30","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_30","Healthy","No","HC_30"
-"HC_28","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_28","Healthy","No","HC_28"
-"HC_25","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_25","Healthy","No","HC_25"
-"HC_23","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_23","Healthy","No","HC_23"
-"HC_21","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_21","Healthy","No","HC_21"
-"HC_19","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_19","Healthy","No","HC_19"
-"HC_17","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_17","Healthy","No","HC_17"
-"HC_14","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_14","Healthy","No","HC_14"
-"HC_12","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_12","Healthy","No","HC_12"
-"HC_8","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_8","Healthy","No","HC_8"
-"LC_11","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_11","Respiratory","No","LC_11"
-"HC_6","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_6","Healthy","No","HC_6"
-"LC_9","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_9","Respiratory","No","LC_9"
-"LC_7","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_7","Respiratory","No","LC_7"
-"LC_5","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_5","Respiratory","No","LC_5"
-"LC_40","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_40","Respiratory","No","LC_40"
-"LC_38","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_38","Respiratory","No","LC_38"
-"LC_35","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_35","Respiratory","No","LC_35"
-"LC_33","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_33","Respiratory","No","LC_33"
-"LC_24","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_24","Respiratory","No","LC_24"
-"LC_22","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_22","Respiratory","No","LC_22"
-"LC_20","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_20","Respiratory","No","LC_20"
-"LC_18","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_18","Respiratory","No","LC_18"
-"LC_16","FengZ_2021",NA,NA,"16S","CHN",NA,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_16","Respiratory","No","LC_16"
+"","sample_id","study_name","Age","BMI","seq_type","country","Gender","age_category","body_site","diseaseCat","cohort_life_style","MetabolomicsType","Metabolomics_body_site","Subject_ID","diseaseCat_clean","longitudinal","sample_id","Intervention_Type","Intervention_phase","Intervention_Duration","host_exposure"
+"1","HC_10","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_10","Healthy","No","HC_10",,,,
+"2","HC_12","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_12","Healthy","No","HC_12",,,,
+"3","HC_14","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_14","Healthy","No","HC_14",,,,
+"4","HC_17","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_17","Healthy","No","HC_17",,,,
+"5","HC_19","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_19","Healthy","No","HC_19",,,,
+"6","HC_21","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_21","Healthy","No","HC_21",,,,
+"7","HC_23","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_23","Healthy","No","HC_23",,,,
+"8","HC_25","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_25","Healthy","No","HC_25",,,,
+"9","HC_28","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_28","Healthy","No","HC_28",,,,
+"10","HC_30","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_30","Healthy","No","HC_30",,,,
+"11","HC_32","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_32","Healthy","No","HC_32",,,,
+"12","HC_34","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_34","Healthy","No","HC_34",,,,
+"13","HC_36","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_36","Healthy","No","HC_36",,,,
+"14","HC_39","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_39","Healthy","No","HC_39",,,,
+"15","HC_6","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_6","Healthy","No","HC_6",,,,
+"16","HC_8","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Healthy","IndustrializedUrban","Untargeted","Fecal","HC_8","Healthy","No","HC_8",,,,
+"17","LC_11","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_11","Respiratory","No","LC_11",,,,
+"18","LC_16","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_16","Respiratory","No","LC_16",,,,
+"19","LC_18","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_18","Respiratory","No","LC_18",,,,
+"20","LC_20","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_20","Respiratory","No","LC_20",,,,
+"21","LC_22","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_22","Respiratory","No","LC_22",,,,
+"22","LC_24","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_24","Respiratory","No","LC_24",,,,
+"23","LC_33","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_33","Respiratory","No","LC_33",,,,
+"24","LC_35","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_35","Respiratory","No","LC_35",,,,
+"25","LC_38","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_38","Respiratory","No","LC_38",,,,
+"26","LC_40","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_40","Respiratory","No","LC_40",,,,
+"27","LC_5","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_5","Respiratory","No","LC_5",,,,
+"28","LC_7","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_7","Respiratory","No","LC_7",,,,
+"29","LC_9","FengZ_2021",,,"16S","CHN",,"senior","Fecal","Lung Cancer","IndustrializedUrban","Untargeted","Fecal","LC_9","Respiratory","No","LC_9",,,,

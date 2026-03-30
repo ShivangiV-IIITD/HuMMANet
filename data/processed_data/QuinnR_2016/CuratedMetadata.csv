@@ -1,8 +1,8 @@
-"","study_name","Age","BMI","seq_type","country","Gender","age_category","body_site","diseaseCat","cohort_life_style","MetabolomicsType","Metabolomics_body_site","Subject_ID","diseaseCat_clean","longitudinal","sample_id"
-"41060","QuinnR_2016",34,25.1428571428571,"16S","USA","M","adult","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","41060","Healthy","No","41060"
-"41343","QuinnR_2016",47,21.0667432730058,"16S","USA","M","adult","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","41343","Healthy","No","41343"
-"40493","QuinnR_2016",43,22.343515592582,"16S","USA","M","adult","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","40493","Healthy","No","40493"
-"40543","QuinnR_2016",40,24.9770431588613,"16S","USA","F","adult","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","40543","Healthy","No","40543"
-"41063","QuinnR_2016",31,26.5432098765432,"16S","USA","F","adult","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","41063","Healthy","No","41063"
-"41358","QuinnR_2016",NA,NA,"16S",NA,NA,NA,"Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","41358","Healthy","No","41358"
-"41367","QuinnR_2016",3,16.1868424095271,"16S","USA","M","child","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","41367","Healthy","No","41367"
+"","sample_id","study_name","Age","BMI","seq_type","country","Gender","age_category","body_site","diseaseCat","cohort_life_style","MetabolomicsType","Metabolomics_body_site","Subject_ID","diseaseCat_clean","longitudinal","sample_id","Intervention_Type","Intervention_phase","Intervention_Duration","host_exposure"
+"1","41060","QuinnR_2016",34,25.1428571428571,"16S","USA","M","adult","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","41060","Healthy","No","41060",,,,
+"2","41343","QuinnR_2016",47,21.0667432730058,"16S","USA","M","adult","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","41343","Healthy","No","41343",,,,
+"3","40493","QuinnR_2016",43,22.343515592582,"16S","USA","M","adult","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","40493","Healthy","No","40493",,,,
+"4","40543","QuinnR_2016",40,24.9770431588613,"16S","USA","F","adult","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","40543","Healthy","No","40543",,,,
+"5","41063","QuinnR_2016",31,26.5432098765432,"16S","USA","F","adult","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","41063","Healthy","No","41063",,,,
+"6","41358","QuinnR_2016",,,"16S",,,,"Fecal","Healthy",,"Untargeted","Swab-Based","41358","Healthy","No","41358",,,,
+"7","41367","QuinnR_2016",3,16.1868424095271,"16S","USA","M","child","Fecal","Healthy","IndustrializedUrban","Untargeted","Swab-Based","41367","Healthy","No","41367",,,,

@@ -1,13 +1,13 @@
 \name{curatedMicrobiomeMetabolomeData}
 \alias{curatedMicrobiomeMetabolomeData}
-\alias{cmm_study_index}
-\alias{cmm_studies}
-\alias{cmm_available_modalities}
-\alias{cmm_load_modality}
-\alias{cmm_load_study}
-\title{Curated Microbiome-Metabolome Data Access Functions}
+\alias{GMMC_study_index}
+\alias{GMMC_studies}
+\alias{GMMC_available_modalities}
+\alias{GMMC_load_modality}
+\alias{GMMC_load_study}
+\title{Gut-Microbiome–Metabolome-Compendium Access Functions}
 \description{
-Helpers to discover and load curated microbiome-metabolome study data
+Helpers to discover and load Gut-Microbiome–Metabolome-Compendium study data
 packaged under \code{inst/extdata}.
 }
 \usage{
@@ -18,20 +18,20 @@ curatedMicrobiomeMetabolomeData(
   drop_missing = TRUE
 )
 
-cmm_study_index(extdata_dir = NULL)
+GMMC_study_index(extdata_dir = NULL)
 
-cmm_studies(extdata_dir = NULL)
+GMMC_studies(extdata_dir = NULL)
 
-cmm_available_modalities(study, extdata_dir = NULL)
+GMMC_available_modalities(study, extdata_dir = NULL)
 
-cmm_load_modality(
+GMMC_load_modality(
   study,
   modality = c("metadata", "species", "metabolome"),
   extdata_dir = NULL,
   allow_missing = FALSE
 )
 
-cmm_load_study(
+GMMC_load_study(
   study,
   modalities = c("metadata", "species", "metabolome"),
   extdata_dir = NULL,
@@ -59,20 +59,20 @@ cmm_load_study(
 }
 \value{
 \itemize{
-  \item \code{cmm_study_index}: \code{data.frame} with one row per study.
-  \item \code{cmm_studies}: character vector of study identifiers.
-  \item \code{cmm_available_modalities}: character vector of available modalities.
-  \item \code{cmm_load_modality}: one modality table as a \code{data.frame}.
-  \item \code{cmm_load_study}: named list of modality tables for one study.
+  \item \code{GMMC_study_index}: \code{data.frame} with one row per study.
+  \item \code{GMMC_studies}: character vector of study identifiers.
+  \item \code{GMMC_available_modalities}: character vector of available modalities.
+  \item \code{GMMC_load_modality}: one modality table as a \code{data.frame}.
+  \item \code{GMMC_load_study}: named list of modality tables for one study.
   \item \code{curatedMicrobiomeMetabolomeData}: named list keyed by study.
 }
 }
 \examples{
 # List studies
-head(cmm_studies())
+head(GMMC_studies())
 
 # Load one study
-x <- cmm_load_study("FranzosaE_2019")
+x <- GMMC_load_study("FranzosaE_2019")
 names(x)
 
 # Load selected studies and modalities
@@ -81,4 +81,3 @@ subset_data <- curatedMicrobiomeMetabolomeData(
   modalities = c("metadata", "metabolome")
 )
 }
-

@@ -1,14 +1,14 @@
 Package: curatedMicrobiomeMetabolomeData
 Type: Package
-Title: Curated Human Microbiome-Metabolome Study Data
+Title: Gut-Microbiome–Metabolome-Compendium
 Version: 0.1.0
 Authors@R:
     c(
       person("Nalin", "Arora", email = "nalin21478@iiitd.ac.in", role = c("aut", "cre")),
-      person("Shivangi", "Verma", email = "shivangiv@iiitd.ac.in", role = c("aut", "cre"))
+      person("Shivangi", "Verma", email = "shivangiv@iiitd.ac.in", role = "aut")
     )
-Description: Curated microbiome and metabolome tables across human studies,
-    packaged with a simple API inspired by curatedMetagenomicData.
+Description: Gut-Microbiome–Metabolome-Compendium tables across human studies,
+    packaged with a simple API for loading and querying study modalities.
 License: MIT + file LICENSE
 URL: https://github.com/Shivi-Verma29/Microbiome_Metabolome_Curated_Studies
 BugReports: https://github.com/Shivi-Verma29/Microbiome_Metabolome_Curated_Studies/issues

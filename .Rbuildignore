@@ -5,4 +5,7 @@
 ^\.Rhistory$
 ^\.RData$
 ^data-raw$
-
+^data-raw/
+^data-raw/curated_metabolome_list_highestCV_clean\.RData$
+^data-raw/curated_metadata_list_df\.RData$
+^data-raw/curated_normalized_species_data\.RData$

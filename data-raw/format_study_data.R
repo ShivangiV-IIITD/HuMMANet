@@ -190,6 +190,7 @@ read_curated_table <- function(path) {
 }
 
 write_csv_gz <- function(df, path) {
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
   con <- gzfile(path, open = "wt")
   on.exit(close(con), add = TRUE)
   utils::write.csv(df, con, row.names = FALSE, quote = TRUE, na = "")

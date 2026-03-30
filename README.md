@@ -1,8 +1,7 @@
 # curatedMicrobiomeMetabolomeData
 
 This repository is now structured as an R package for curated human
-microbiome-metabolome studies, inspired by the user workflow of
-`curatedMetagenomicData`.
+Gut-Microbiome–Metabolome-Compendium studies.
 
 ## What this package provides
 
@@ -37,15 +36,15 @@ remotes::install_github("Shivi-Verma29/Microbiome_Metabolome_Curated_Studies")
 library(curatedMicrobiomeMetabolomeData)
 
 # Inspect studies
-studies <- cmm_studies()
+studies <- GMMC_studies()
 head(studies)
 
 # Load one study (all available modalities)
-one <- cmm_load_study("FranzosaE_2019")
+one <- GMMC_load_study("FranzosaE_2019")
 names(one)
 
 # Load one modality only
-meta <- cmm_load_modality("FranzosaE_2019", "metadata")
+meta <- GMMC_load_modality("FranzosaE_2019", "metadata")
 
 # Load multiple studies
 subset_data <- curatedMicrobiomeMetabolomeData(
