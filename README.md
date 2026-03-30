@@ -41,33 +41,5 @@ subset_data <- GutMicrobiomeMetabolomeCompendium(
 )
 names(subset_data)
 ```
-
-## Data structure
-
-Each study can contain up to three tables:
-
-- `metadata`
-- `species`
-- `metabolome`
-
-Internally these are stored in `inst/extdata/studies/<study_slug>/` as gzipped
-CSV files, and indexed by `inst/extdata/study_index.csv`.
-
-## Main functions
-
-- `GMMC_study_index()`: returns the study-level index table.
-- `GMMC_studies()`: returns study names.
-- `GMMC_available_modalities(study)`: returns available modalities for a study.
-- `GMMC_load_modality(study, modality)`: loads one table as a `data.frame`.
-- `GMMC_load_study(study)`: loads all available tables for one study.
-- `GutMicrobiomeMetabolomeCompendium(studies, modalities)`: loads a multi-study
-  named list.
-
-## Using from a local checkout
-
-If you are running from a cloned repository without installing:
-
-```r
-ext_dir <- file.path(getwd(), "inst", "extdata")
-idx <- GMMC_study_index(extdata_dir = ext_dir)
+x <- GMMC_study_index(extdata_dir = ext_dir)
 ```
