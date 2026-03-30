@@ -1,5 +1,5 @@
-\name{curatedMicrobiomeMetabolomeData}
-\alias{curatedMicrobiomeMetabolomeData}
+\name{GutMicrobiomeMetabolomeCompendium}
+\alias{GutMicrobiomeMetabolomeCompendium}
 \alias{GMMC_study_index}
 \alias{GMMC_studies}
 \alias{GMMC_available_modalities}
@@ -11,7 +11,7 @@ Helpers to discover and load Gut-Microbiome–Metabolome-Compendium study data
 packaged under \code{inst/extdata}.
 }
 \usage{
-curatedMicrobiomeMetabolomeData(
+GutMicrobiomeMetabolomeCompendium(
   studies = NULL,
   modalities = c("metadata", "species", "metabolome"),
   extdata_dir = NULL,
@@ -64,7 +64,7 @@ GMMC_load_study(
   \item \code{GMMC_available_modalities}: character vector of available modalities.
   \item \code{GMMC_load_modality}: one modality table as a \code{data.frame}.
   \item \code{GMMC_load_study}: named list of modality tables for one study.
-  \item \code{curatedMicrobiomeMetabolomeData}: named list keyed by study.
+  \item \code{GutMicrobiomeMetabolomeCompendium}: named list keyed by study.
 }
 }
 \examples{
@@ -76,7 +76,7 @@ x <- GMMC_load_study("FranzosaE_2019")
 names(x)
 
 # Load selected studies and modalities
-subset_data <- curatedMicrobiomeMetabolomeData(
+subset_data <- GutMicrobiomeMetabolomeCompendium(
   studies = c("FranzosaE_2019", "LifelinesDEEP_WGS"),
   modalities = c("metadata", "metabolome")
 )

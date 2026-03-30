@@ -4,7 +4,7 @@ GMMC_normalize_extdata_dir <- function(extdata_dir = NULL) {
     return(normalizePath(extdata_dir, mustWork = TRUE))
   }
 
-  installed <- system.file("extdata", package = "curatedMicrobiomeMetabolomeData")
+  installed <- system.file("extdata", package = "GutMicrobiomeMetabolomeCompendium")
   if (nzchar(installed) && dir.exists(installed)) {
     return(installed)
   }
@@ -181,7 +181,7 @@ GMMC_load_study <- function(
 #'
 #' @return Named list keyed by study, where each element is a modality list.
 #' @export
-curatedMicrobiomeMetabolomeData <- function(
+GutMicrobiomeMetabolomeCompendium <- function(
   studies = NULL,
   modalities = c("metadata", "species", "metabolome"),
   extdata_dir = NULL,

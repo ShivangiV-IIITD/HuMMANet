@@ -1,4 +1,4 @@
-export(curatedMicrobiomeMetabolomeData)
+export(GutMicrobiomeMetabolomeCompendium)
 export(GMMC_study_index)
 export(GMMC_studies)
 export(GMMC_available_modalities)

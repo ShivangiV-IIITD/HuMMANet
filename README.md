@@ -1,4 +1,4 @@
-# curatedMicrobiomeMetabolomeData
+# GutMicrobiomeMetabolomeCompendium
 
 R package for the Gut-Microbiome–Metabolome-Compendium resource.
 
@@ -12,7 +12,7 @@ remotes::install_github("Shivi-Verma29/Microbiome_Metabolome_Curated_Studies")
 ## Quick start
 
 ```r
-library(curatedMicrobiomeMetabolomeData)
+library(GutMicrobiomeMetabolomeCompendium)
 
 # list all studies
 studies <- GMMC_studies()
@@ -35,7 +35,7 @@ one_study <- GMMC_load_study("DawkinsJ_2022")
 names(one_study)
 
 # load selected studies and modalities
-subset_data <- curatedMicrobiomeMetabolomeData(
+subset_data <- GutMicrobiomeMetabolomeCompendium(
   studies = c("DawkinsJ_2022", "FranzosaE_2019"),
   modalities = c("metadata", "metabolome")
 )
@@ -60,7 +60,7 @@ CSV files, and indexed by `inst/extdata/study_index.csv`.
 - `GMMC_available_modalities(study)`: returns available modalities for a study.
 - `GMMC_load_modality(study, modality)`: loads one table as a `data.frame`.
 - `GMMC_load_study(study)`: loads all available tables for one study.
-- `curatedMicrobiomeMetabolomeData(studies, modalities)`: loads a multi-study
+- `GutMicrobiomeMetabolomeCompendium(studies, modalities)`: loads a multi-study
   named list.
 
 ## Using from a local checkout
