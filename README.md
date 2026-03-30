@@ -41,5 +41,4 @@ subset_data <- GutMicrobiomeMetabolomeCompendium(
 )
 names(subset_data)
 ```
-x <- GMMC_study_index(extdata_dir = ext_dir)
-```
+
