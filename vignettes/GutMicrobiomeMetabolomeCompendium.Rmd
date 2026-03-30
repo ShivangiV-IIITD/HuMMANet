@@ -31,15 +31,6 @@ modalities, and load one or more studies into R.
 
 ## Installation
 
-From Bioconductor:
-
-```{r eval = FALSE}
-if (!require("BiocManager", quietly = TRUE)) {
-    install.packages("BiocManager")
-}
-BiocManager::install("GutMicrobiomeMetabolomeCompendium")
-```
-
 Development version from GitHub:
 
 ```{r eval = FALSE}
