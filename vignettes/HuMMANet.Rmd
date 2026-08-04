@@ -1,0 +1,119 @@
+---
+title: "HuMMANet"
+author: "Nalin Arora, Shivangi Verma"
+date: "`r Sys.Date()`"
+output:
+  BiocStyle::html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{HuMMANet}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+`HuMMANet` provides curated study-level tables for:
+
+- metadata
+- species profiles
+- metabolome profiles
+
+The package is structured as a lightweight `ExperimentHub` interface package.
+Large study bundles are published outside the source tarball, while the package
+ships accessor functions, metadata, documentation, and hub-preparation scripts.
+
+## Installation
+
+Install from Bioconductor:
+
+```{r eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("HuMMANet")
+```
+
+## Load the package
+
+```{r}
+library(HuMMANet)
+```
+
+## Connect to ExperimentHub
+
+```{r eval = FALSE}
+hub <- HuMMANetHub()
+hub
+```
+
+## Discover available studies
+
+```{r}
+studies <- HuMMANet_studies()
+length(studies)
+head(studies)
+```
+
+## Inspect the study index
+
+```{r}
+idx <- HuMMANet_study_index()
+head(idx[, c("study", "has_metadata", "has_species", "has_metabolome")])
+```
+
+## Load one study
+
+```{r}
+study_id <- idx$study[[1]]
+available <- HuMMANet_available_modalities(study_id)
+available
+
+one_study <- HuMMANet_load_study(study_id)
+names(one_study)
+```
+
+## Load one modality
+
+```{r}
+meta <- HuMMANet_load_modality(study_id, "metadata")
+dim(meta)
+head(meta[, seq_len(min(6, ncol(meta)))])
+```
+
+## Load multiple studies and modalities
+
+```{r}
+selected_studies <- studies[seq_len(min(2, length(studies)))]
+multi <- HuMMANet(
+    studies = selected_studies,
+    modalities = c("metadata", "metabolome")
+)
+
+names(multi)
+names(multi[[1]])
+```
+
+## Local hub-resource preparation
+
+For package development, the repository keeps local csv files outside the built
+source package. To generate `.rds` study bundles plus a metadata template for
+submission to `ExperimentHub`, run:
+
+```{r eval = FALSE}
+source("inst/scripts/make-experimenthub-resources.R")
+build_hummanet_experimenthub_resources()
+```
+
+## Session information
+
+```{r}
+sessionInfo()
+```

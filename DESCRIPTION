@@ -1,20 +1,28 @@
-Package: GutMicrobiomeMetabolomeCompendium
+Package: HuMMANet
 Type: Package
-Title: Gut-Microbiome–Metabolome-Compendium
+Title: HuMMANet
+biocViews: ExperimentData, ExperimentHub, Homo_sapiens_Data
 Version: 0.1.0
+Author: Nalin Arora [aut, cre], Shivangi Verma [aut]
+Maintainer: Nalin Arora <nalin21478@iiitd.ac.in>
 Authors@R:
     c(
       person("Nalin", "Arora", email = "nalin21478@iiitd.ac.in", role = c("aut", "cre")),
       person("Shivangi", "Verma", email = "shivangiv@iiitd.ac.in", role = "aut")
     )
-Description: Gut-Microbiome–Metabolome-Compendium tables across human studies,
-    packaged with a simple API for loading and querying study modalities.
+Description: HuMMANet provides accessors for curated human
+    microbiome-metabolome study bundles distributed through
+    Bioconductor ExperimentHub, with a local development fallback for
+    generating and validating hub resources before submission.
 License: MIT + file LICENSE
-URL: https://github.com/Shivi-Verma29/Microbiome_Metabolome_Curated_Studies
-BugReports: https://github.com/Shivi-Verma29/Microbiome_Metabolome_Curated_Studies/issues
+URL: https://github.com/Shivi-Verma29/HuMMANet
+BugReports: https://github.com/Shivi-Verma29/HuMMANet/issues
 Encoding: UTF-8
 LazyData: false
 Imports:
+    ExperimentHub,
+    S4Vectors,
+    stats,
     utils
 Suggests:
     BiocStyle,

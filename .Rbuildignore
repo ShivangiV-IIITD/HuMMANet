@@ -4,6 +4,14 @@
 ^\.gitignore$
 ^\.Rhistory$
 ^\.RData$
+^\.DS_Store$
+^.*\.tar\.gz$
+^.*\.Rcheck$
+^.*\.Rcheck/
+^experimenthub$
+^experimenthub/
+^inst/extdata/studies$
+^inst/extdata/studies/
 ^data-raw$
 ^data-raw/
 ^data-raw/curated_metabolome_list_highestCV_clean\.RData$
