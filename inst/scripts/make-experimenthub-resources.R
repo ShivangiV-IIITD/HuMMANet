@@ -15,6 +15,10 @@ build_hummanet_experimenthub_resources <- function(
     check.names = FALSE,
     stringsAsFactors = FALSE
   )
+  modality_names <- intersect(
+    c("metadata", "species", "metabolome", "after_hummanet"),
+    sub("_file$", "", grep("_file$", colnames(index), value = TRUE))
+  )
 
   resource_root <- file.path(output_dir, "HuMMANet", "v1")
   studies_dir <- file.path(resource_root, "studies")
@@ -44,8 +48,9 @@ build_hummanet_experimenthub_resources <- function(
     data.frame(
       title = "HuMMANet Study Index",
       description = paste(
-        "Study-level availability table for the HuMMANet",
-        "ExperimentHub resources."
+        "Study-level index of HuMMANet ExperimentHub resources,",
+        "including metadata, species, metabolome, and",
+        "after_hummanet availability for each study."
       ),
       biocversion = bioc_version,
       genome = "NA",
@@ -62,7 +67,13 @@ build_hummanet_experimenthub_resources <- function(
       location_prefix = location_prefix,
       rdatapath = file.path("HuMMANet", "v1", "study_index.rds"),
       preparerclass = "RDSFile",
-      tags = "ExperimentHub,ExperimentData,Microbiome,Metabolome",
+      tags = paste(
+        c(
+          "ExperimentHub", "ExperimentData", "Microbiome",
+          "Metabolome", "HuMMANet", "study_index"
+        ),
+        collapse = ","
+      ),
       stringsAsFactors = FALSE
     )
   )
@@ -73,7 +84,7 @@ build_hummanet_experimenthub_resources <- function(
     slug <- row$study_slug[[1]]
 
     bundle <- list(study = study)
-    for (modality in c("metadata", "species", "metabolome")) {
+    for (modality in modality_names) {
       rel_path <- row[[paste0(modality, "_file")]][1]
       bundle[[modality]] <- if (nzchar(rel_path)) {
         read_hummanet_csv_any(file.path(source_extdata_dir, rel_path))
@@ -91,8 +102,8 @@ build_hummanet_experimenthub_resources <- function(
       record_type = "study_bundle",
       title = paste("HuMMANet Study Bundle:", study),
       description = paste(
-        "Curated metadata, species, and metabolome tables",
-        "for the HuMMANet study", study, "."
+        "Curated metadata, species, original metabolome, and",
+        "after_hummanet tables for the HuMMANet study", study, "."
       ),
       local_path = file.path("HuMMANet", "v1", "studies", paste0(slug, ".rds")),
       rdataclass = "list",
@@ -102,8 +113,8 @@ build_hummanet_experimenthub_resources <- function(
     metadata_rows[[length(metadata_rows) + 1L]] <- data.frame(
       title = paste("HuMMANet Study Bundle:", study),
       description = paste(
-        "Curated metadata, species, and metabolome tables",
-        "for the HuMMANet study", study, "."
+        "Curated metadata, species, original metabolome, and",
+        "after_hummanet tables for the HuMMANet study", study, "."
       ),
       biocversion = bioc_version,
       genome = "NA",
@@ -121,7 +132,10 @@ build_hummanet_experimenthub_resources <- function(
       rdatapath = file.path("HuMMANet", "v1", "studies", paste0(slug, ".rds")),
       preparerclass = "RDSFile",
       tags = paste(
-        c("ExperimentHub", "ExperimentData", "Microbiome", "Metabolome", study),
+        c(
+          "ExperimentHub", "ExperimentData", "Microbiome",
+          "Metabolome", "HuMMANet", "after_hummanet", study
+        ),
         collapse = ","
       ),
       stringsAsFactors = FALSE

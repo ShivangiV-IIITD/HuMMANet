@@ -41,6 +41,10 @@ dim(meta)
 one_study <- HuMMANet_load_study("DawkinsJ_2022")
 names(one_study)
 
+# load the HuMMANet-processed profile for one study
+after_hummanet <- HuMMANet_load_modality("DawkinsJ_2022", "after_hummanet")
+dim(after_hummanet)
+
 # load selected studies and modalities
 subset_data <- HuMMANet(
   studies = c("DawkinsJ_2022", "FranzosaE_2019"),
@@ -52,10 +56,14 @@ names(subset_data)
 ## Local development
 
 The repository keeps the raw csv studies locally for preparing hub resources,
-but the built package excludes `inst/extdata/studies/`. To stage the
-ExperimentHub `.rds` bundles and metadata template, run:
+including per-study `after_hummanet` tables. The built package excludes
+`inst/extdata/studies/`. To stage the per-study `after_hummanet` files and the
+ExperimentHub `.rds` bundles plus metadata template, run:
 
 ```r
+source("inst/scripts/split_after_hummanet_by_study.R")
+split_after_hummanet_by_study()
+
 source("inst/scripts/make-experimenthub-resources.R")
 build_hummanet_experimenthub_resources()
 ```

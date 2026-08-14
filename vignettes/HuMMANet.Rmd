@@ -25,6 +25,7 @@ knitr::opts_chunk$set(
 - metadata
 - species profiles
 - metabolome profiles
+- HuMMANet-processed metabolome profiles
 
 The package is structured as a lightweight `ExperimentHub` interface package.
 Large study bundles are published outside the source tarball, while the package
@@ -88,6 +89,13 @@ dim(meta)
 head(meta[, seq_len(min(6, ncol(meta)))])
 ```
 
+## Load the HuMMANet-processed profile
+
+```{r eval = FALSE}
+after_hummanet <- HuMMANet_load_modality(study_id, "after_hummanet")
+dim(after_hummanet)
+```
+
 ## Load multiple studies and modalities
 
 ```{r}
@@ -104,10 +112,13 @@ names(multi[[1]])
 ## Local hub-resource preparation
 
 For package development, the repository keeps local csv files outside the built
-source package. To generate `.rds` study bundles plus a metadata template for
-submission to `ExperimentHub`, run:
+source package. To generate per-study `after_hummanet` csv files, `.rds` study
+bundles, and a metadata template for submission to `ExperimentHub`, run:
 
 ```{r eval = FALSE}
+source("inst/scripts/split_after_hummanet_by_study.R")
+split_after_hummanet_by_study()
+
 source("inst/scripts/make-experimenthub-resources.R")
 build_hummanet_experimenthub_resources()
 ```

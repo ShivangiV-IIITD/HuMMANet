@@ -16,7 +16,7 @@ development and hub-resource generation.
 \usage{
 HuMMANet(
   studies = NULL,
-  modalities = c("metadata", "species", "metabolome"),
+  modalities = c("metadata", "species", "metabolome", "after_hummanet"),
   extdata_dir = NULL,
   drop_missing = TRUE,
   localHub = FALSE
@@ -34,7 +34,7 @@ HuMMANet_available_modalities(study, extdata_dir = NULL, localHub = FALSE)
 
 HuMMANet_load_modality(
   study,
-  modality = c("metadata", "species", "metabolome"),
+  modality = c("metadata", "species", "metabolome", "after_hummanet"),
   extdata_dir = NULL,
   allow_missing = FALSE,
   localHub = FALSE
@@ -42,7 +42,7 @@ HuMMANet_load_modality(
 
 HuMMANet_load_study(
   study,
-  modalities = c("metadata", "species", "metabolome"),
+  modalities = c("metadata", "species", "metabolome", "after_hummanet"),
   extdata_dir = NULL,
   drop_missing = TRUE,
   localHub = FALSE
@@ -53,7 +53,8 @@ HuMMANet_load_study(
   all indexed studies are loaded.}
 
   \item{modalities}{Character vector of modalities to load from
-  \code{"metadata"}, \code{"species"}, \code{"metabolome"}.}
+  \code{"metadata"}, \code{"species"}, \code{"metabolome"},
+  \code{"after_hummanet"}.}
 
   \item{extdata_dir}{Optional explicit path to a local development
   \code{extdata} directory.}
@@ -104,7 +105,7 @@ names(x)
 # Load selected studies and modalities
 subset_data <- HuMMANet(
   studies = c("FranzosaE_2019", "DawkinsJ_2022"),
-  modalities = c("metadata", "metabolome")
+  modalities = c("metadata", "metabolome", "after_hummanet")
 )
 }
 }

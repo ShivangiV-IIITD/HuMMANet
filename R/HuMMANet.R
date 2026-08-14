@@ -155,13 +155,13 @@ HuMMANet_local_study_index <- function(extdata_dir = NULL) {
 # Internal helper: load a local study bundle from csv files.
 HuMMANet_load_study_local <- function(
   study,
-  modalities = c("metadata", "species", "metabolome"),
+  modalities = c("metadata", "species", "metabolome", "after_hummanet"),
   extdata_dir = NULL,
   drop_missing = TRUE
 ) {
   modalities <- match.arg(
     modalities,
-    choices = c("metadata", "species", "metabolome"),
+    choices = c("metadata", "species", "metabolome", "after_hummanet"),
     several.ok = TRUE
   )
 
@@ -297,7 +297,8 @@ HuMMANet_studies <- function(extdata_dir = NULL, localHub = FALSE) {
 #' @inheritParams HuMMANet_study_index
 #' @param study Study identifier (for example `"FranzosaE_2019"`).
 #'
-#' @return Character vector chosen from `metadata`, `species`, `metabolome`.
+#' @return Character vector chosen from `metadata`, `species`, `metabolome`,
+#'   `after_hummanet`.
 #' @export
 HuMMANet_available_modalities <- function(
   study,
@@ -314,6 +315,9 @@ HuMMANet_available_modalities <- function(
   }
 
   modalities <- c("metadata", "species", "metabolome")
+  if ("has_after_hummanet" %in% colnames(row)) {
+    modalities <- c(modalities, "after_hummanet")
+  }
   flags <- vapply(
     modalities,
     function(x) isTRUE(row[[paste0("has_", x)]][1]),
@@ -337,14 +341,14 @@ HuMMANet_available_modalities <- function(
 #' @export
 HuMMANet_load_study <- function(
   study,
-  modalities = c("metadata", "species", "metabolome"),
+  modalities = c("metadata", "species", "metabolome", "after_hummanet"),
   extdata_dir = NULL,
   drop_missing = TRUE,
   localHub = FALSE
 ) {
   modalities <- match.arg(
     modalities,
-    choices = c("metadata", "species", "metabolome"),
+    choices = c("metadata", "species", "metabolome", "after_hummanet"),
     several.ok = TRUE
   )
 
@@ -392,14 +396,15 @@ HuMMANet_load_study <- function(
 #' Load a Single Modality for One Study
 #'
 #' @inheritParams HuMMANet_load_study
-#' @param modality One of `metadata`, `species`, `metabolome`.
+#' @param modality One of `metadata`, `species`, `metabolome`,
+#'   `after_hummanet`.
 #' @param allow_missing If `TRUE`, return `NULL` when modality is missing.
 #'
 #' @return A `data.frame` or `NULL` if missing and `allow_missing = TRUE`.
 #' @export
 HuMMANet_load_modality <- function(
   study,
-  modality = c("metadata", "species", "metabolome"),
+  modality = c("metadata", "species", "metabolome", "after_hummanet"),
   extdata_dir = NULL,
   allow_missing = FALSE,
   localHub = FALSE
@@ -435,7 +440,7 @@ HuMMANet_load_modality <- function(
 #' @export
 HuMMANet <- function(
   studies = NULL,
-  modalities = c("metadata", "species", "metabolome"),
+  modalities = c("metadata", "species", "metabolome", "after_hummanet"),
   extdata_dir = NULL,
   drop_missing = TRUE,
   localHub = FALSE
