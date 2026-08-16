@@ -16,7 +16,18 @@ development and hub-resource generation.
 \usage{
 HuMMANet(
   studies = NULL,
-  modalities = c("metadata", "species", "metabolome", "after_hummanet"),
+  modalities = c(
+    "MetadataProfile",
+    "taxaAbundanceProfile",
+    "OriginalMetaboliteProfile",
+    "harmonizedMetaboliteProfile",
+    "metaboliteIdentifierMapping",
+    "microbialProducerAnnotations",
+    "metaboliteDiseaseAssociations",
+    "metabolitePathwayAnnotations",
+    "drugBankSimilarityMatches",
+    "drugCentralSimilarityMatches"
+  ),
   extdata_dir = NULL,
   drop_missing = TRUE,
   localHub = FALSE
@@ -34,7 +45,18 @@ HuMMANet_available_modalities(study, extdata_dir = NULL, localHub = FALSE)
 
 HuMMANet_load_modality(
   study,
-  modality = c("metadata", "species", "metabolome", "after_hummanet"),
+  modality = c(
+    "MetadataProfile",
+    "taxaAbundanceProfile",
+    "OriginalMetaboliteProfile",
+    "harmonizedMetaboliteProfile",
+    "metaboliteIdentifierMapping",
+    "microbialProducerAnnotations",
+    "metaboliteDiseaseAssociations",
+    "metabolitePathwayAnnotations",
+    "drugBankSimilarityMatches",
+    "drugCentralSimilarityMatches"
+  ),
   extdata_dir = NULL,
   allow_missing = FALSE,
   localHub = FALSE
@@ -42,7 +64,18 @@ HuMMANet_load_modality(
 
 HuMMANet_load_study(
   study,
-  modalities = c("metadata", "species", "metabolome", "after_hummanet"),
+  modalities = c(
+    "MetadataProfile",
+    "taxaAbundanceProfile",
+    "OriginalMetaboliteProfile",
+    "harmonizedMetaboliteProfile",
+    "metaboliteIdentifierMapping",
+    "microbialProducerAnnotations",
+    "metaboliteDiseaseAssociations",
+    "metabolitePathwayAnnotations",
+    "drugBankSimilarityMatches",
+    "drugCentralSimilarityMatches"
+  ),
   extdata_dir = NULL,
   drop_missing = TRUE,
   localHub = FALSE
@@ -53,8 +86,14 @@ HuMMANet_load_study(
   all indexed studies are loaded.}
 
   \item{modalities}{Character vector of modalities to load from
-  \code{"metadata"}, \code{"species"}, \code{"metabolome"},
-  \code{"after_hummanet"}.}
+  \code{"MetadataProfile"}, \code{"taxaAbundanceProfile"},
+  \code{"OriginalMetaboliteProfile"}, \code{"harmonizedMetaboliteProfile"},
+  \code{"metaboliteIdentifierMapping"},
+  \code{"microbialProducerAnnotations"},
+  \code{"metaboliteDiseaseAssociations"},
+  \code{"metabolitePathwayAnnotations"},
+  \code{"drugBankSimilarityMatches"},
+  \code{"drugCentralSimilarityMatches"}.}
 
   \item{extdata_dir}{Optional explicit path to a local development
   \code{extdata} directory.}
@@ -66,7 +105,7 @@ HuMMANet_load_study(
 
   \item{study}{Study identifier, for example \code{"FranzosaE_2019"}.}
 
-  \item{modality}{Single modality to load.}
+  \item{modality}{Single modality to load from the same set.}
 
   \item{allow_missing}{If \code{TRUE}, return \code{NULL} when modality is
   not present for the selected study.}
@@ -105,7 +144,12 @@ names(x)
 # Load selected studies and modalities
 subset_data <- HuMMANet(
   studies = c("FranzosaE_2019", "DawkinsJ_2022"),
-  modalities = c("metadata", "metabolome", "after_hummanet")
+  modalities = c(
+    "MetadataProfile",
+    "OriginalMetaboliteProfile",
+    "harmonizedMetaboliteProfile",
+    "metabolitePathwayAnnotations"
+  )
 )
 }
 }

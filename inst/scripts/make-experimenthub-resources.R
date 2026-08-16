@@ -16,7 +16,13 @@ build_hummanet_experimenthub_resources <- function(
     stringsAsFactors = FALSE
   )
   modality_names <- intersect(
-    c("metadata", "species", "metabolome", "after_hummanet"),
+    c(
+      "MetadataProfile", "taxaAbundanceProfile",
+      "OriginalMetaboliteProfile", "harmonizedMetaboliteProfile",
+      "metaboliteIdentifierMapping", "microbialProducerAnnotations",
+      "metaboliteDiseaseAssociations", "metabolitePathwayAnnotations",
+      "drugBankSimilarityMatches", "drugCentralSimilarityMatches"
+    ),
     sub("_file$", "", grep("_file$", colnames(index), value = TRUE))
   )
 
@@ -49,8 +55,10 @@ build_hummanet_experimenthub_resources <- function(
       title = "HuMMANet Study Index",
       description = paste(
         "Study-level index of HuMMANet ExperimentHub resources,",
-        "including metadata, species, metabolome, and",
-        "after_hummanet availability for each study."
+        "including MetadataProfile, taxaAbundanceProfile,",
+        "OriginalMetaboliteProfile, harmonizedMetaboliteProfile,",
+        "and annotation modalities",
+        "for each study."
       ),
       biocversion = bioc_version,
       genome = "NA",
@@ -102,8 +110,9 @@ build_hummanet_experimenthub_resources <- function(
       record_type = "study_bundle",
       title = paste("HuMMANet Study Bundle:", study),
       description = paste(
-        "Curated metadata, species, original metabolome, and",
-        "after_hummanet tables for the HuMMANet study", study, "."
+        "Curated MetadataProfile, taxaAbundanceProfile,",
+        "OriginalMetaboliteProfile, harmonizedMetaboliteProfile,",
+        "and annotation tables for the HuMMANet study", study, "."
       ),
       local_path = file.path("HuMMANet", "v1", "studies", paste0(slug, ".rds")),
       rdataclass = "list",
@@ -113,8 +122,9 @@ build_hummanet_experimenthub_resources <- function(
     metadata_rows[[length(metadata_rows) + 1L]] <- data.frame(
       title = paste("HuMMANet Study Bundle:", study),
       description = paste(
-        "Curated metadata, species, original metabolome, and",
-        "after_hummanet tables for the HuMMANet study", study, "."
+        "Curated MetadataProfile, taxaAbundanceProfile,",
+        "OriginalMetaboliteProfile, harmonizedMetaboliteProfile,",
+        "and annotation tables for the HuMMANet study", study, "."
       ),
       biocversion = bioc_version,
       genome = "NA",
@@ -134,7 +144,10 @@ build_hummanet_experimenthub_resources <- function(
       tags = paste(
         c(
           "ExperimentHub", "ExperimentData", "Microbiome",
-          "Metabolome", "HuMMANet", "after_hummanet", study
+          "Metabolome", "HuMMANet", "harmonizedMetaboliteProfile",
+          "metaboliteIdentifierMapping", "microbialProducerAnnotations",
+          "metaboliteDiseaseAssociations", "metabolitePathwayAnnotations",
+          "drugBankSimilarityMatches", "drugCentralSimilarityMatches", study
         ),
         collapse = ","
       ),

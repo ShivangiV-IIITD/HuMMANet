@@ -43,9 +43,9 @@ choose_sample_column <- function(metadata, sample_names) {
 
 ensure_after_hummanet_columns <- function(study_index) {
   defaults <- list(
-    after_hummanet_file = "",
-    n_after_hummanet = 0L,
-    has_after_hummanet = FALSE
+    harmonizedMetaboliteProfile_file = "",
+    n_harmonizedMetaboliteProfile = 0L,
+    has_harmonizedMetaboliteProfile = FALSE
   )
 
   for (nm in names(defaults)) {
@@ -82,7 +82,7 @@ split_after_hummanet_by_study <- function(
   for (i in seq_len(nrow(study_index))) {
     study <- study_index$study[[i]]
     slug <- study_index$study_slug[[i]]
-    metadata_path <- file.path(extdata_dir, study_index$metadata_file[[i]])
+    metadata_path <- file.path(extdata_dir, study_index$MetadataProfile_file[[i]])
     metadata <- read_gz_csv(metadata_path)
 
     sample_col <- choose_sample_column(metadata, sample_names)
@@ -99,14 +99,14 @@ split_after_hummanet_by_study <- function(
     export_path <- file.path(export_dir, paste0(study, "_afterHuMMANet.csv"))
     write.csv(out_df, export_path, row.names = FALSE, quote = TRUE)
 
-    package_rel_path <- file.path("studies", slug, "after_hummanet.csv.gz")
+    package_rel_path <- file.path("studies", slug, "harmonizedMetaboliteProfile.csv.gz")
     package_abs_path <- file.path(extdata_dir, package_rel_path)
     dir.create(dirname(package_abs_path), recursive = TRUE, showWarnings = FALSE)
     write_gz_csv(out_df, package_abs_path)
 
-    study_index$after_hummanet_file[[i]] <- package_rel_path
-    study_index$n_after_hummanet[[i]] <- nrow(out_df)
-    study_index$has_after_hummanet[[i]] <- nrow(out_df) > 0L
+    study_index$harmonizedMetaboliteProfile_file[[i]] <- package_rel_path
+    study_index$n_harmonizedMetaboliteProfile[[i]] <- nrow(out_df)
+    study_index$has_harmonizedMetaboliteProfile[[i]] <- nrow(out_df) > 0L
 
     summary_rows[[i]] <- data.frame(
       study = study,

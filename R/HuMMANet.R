@@ -72,6 +72,31 @@ HuMMANet_read_csv_any <- function(path) {
   )
 }
 
+# Internal helper: public HuMMANet modality names.
+HuMMANet_public_modality_names <- function() {
+  c(
+    "MetadataProfile",
+    "taxaAbundanceProfile",
+    "OriginalMetaboliteProfile",
+    "harmonizedMetaboliteProfile",
+    "metaboliteIdentifierMapping",
+    "microbialProducerAnnotations",
+    "metaboliteDiseaseAssociations",
+    "metabolitePathwayAnnotations",
+    "drugBankSimilarityMatches",
+    "drugCentralSimilarityMatches"
+  )
+}
+
+# Internal helper: validate and normalize modality names.
+HuMMANet_normalize_modalities <- function(modalities) {
+  match.arg(
+    modalities,
+    choices = HuMMANet_public_modality_names(),
+    several.ok = TRUE
+  )
+}
+
 # Internal helper: read the packaged hub manifest.
 HuMMANet_hub_manifest <- function(extdata_dir = NULL) {
   extdata_dir <- HuMMANet_normalize_extdata_dir(extdata_dir, require_studies = FALSE)
@@ -155,15 +180,11 @@ HuMMANet_local_study_index <- function(extdata_dir = NULL) {
 # Internal helper: load a local study bundle from csv files.
 HuMMANet_load_study_local <- function(
   study,
-  modalities = c("metadata", "species", "metabolome", "after_hummanet"),
+  modalities = HuMMANet_public_modality_names(),
   extdata_dir = NULL,
   drop_missing = TRUE
 ) {
-  modalities <- match.arg(
-    modalities,
-    choices = c("metadata", "species", "metabolome", "after_hummanet"),
-    several.ok = TRUE
-  )
+  modalities <- HuMMANet_normalize_modalities(modalities)
 
   extdata_dir <- HuMMANet_normalize_extdata_dir(
     extdata_dir = extdata_dir,
@@ -297,8 +318,7 @@ HuMMANet_studies <- function(extdata_dir = NULL, localHub = FALSE) {
 #' @inheritParams HuMMANet_study_index
 #' @param study Study identifier (for example `"FranzosaE_2019"`).
 #'
-#' @return Character vector chosen from `metadata`, `species`, `metabolome`,
-#'   `after_hummanet`.
+#' @return Character vector of public HuMMANet modality names.
 #' @export
 HuMMANet_available_modalities <- function(
   study,
@@ -314,13 +334,22 @@ HuMMANet_available_modalities <- function(
     stop("Unknown study: ", study)
   }
 
-  modalities <- c("metadata", "species", "metabolome")
-  if ("has_after_hummanet" %in% colnames(row)) {
-    modalities <- c(modalities, "after_hummanet")
-  }
+  modalities <- HuMMANet_public_modality_names()
   flags <- vapply(
     modalities,
-    function(x) isTRUE(row[[paste0("has_", x)]][1]),
+    function(x) {
+      has_col <- paste0("has_", x)
+      if (has_col %in% colnames(row)) {
+        return(isTRUE(row[[has_col]][1]))
+      }
+
+      file_col <- paste0(x, "_file")
+      if (file_col %in% colnames(row)) {
+        return(nzchar(row[[file_col]][1]))
+      }
+
+      FALSE
+    },
     logical(1)
   )
 
@@ -341,16 +370,12 @@ HuMMANet_available_modalities <- function(
 #' @export
 HuMMANet_load_study <- function(
   study,
-  modalities = c("metadata", "species", "metabolome", "after_hummanet"),
+  modalities = HuMMANet_public_modality_names(),
   extdata_dir = NULL,
   drop_missing = TRUE,
   localHub = FALSE
 ) {
-  modalities <- match.arg(
-    modalities,
-    choices = c("metadata", "species", "metabolome", "after_hummanet"),
-    several.ok = TRUE
-  )
+  modalities <- HuMMANet_normalize_modalities(modalities)
 
   if (!is.null(extdata_dir)) {
     return(HuMMANet_load_study_local(
@@ -396,15 +421,14 @@ HuMMANet_load_study <- function(
 #' Load a Single Modality for One Study
 #'
 #' @inheritParams HuMMANet_load_study
-#' @param modality One of `metadata`, `species`, `metabolome`,
-#'   `after_hummanet`.
+#' @param modality One public HuMMANet modality name.
 #' @param allow_missing If `TRUE`, return `NULL` when modality is missing.
 #'
 #' @return A `data.frame` or `NULL` if missing and `allow_missing = TRUE`.
 #' @export
 HuMMANet_load_modality <- function(
   study,
-  modality = c("metadata", "species", "metabolome", "after_hummanet"),
+  modality = HuMMANet_public_modality_names(),
   extdata_dir = NULL,
   allow_missing = FALSE,
   localHub = FALSE
@@ -440,7 +464,7 @@ HuMMANet_load_modality <- function(
 #' @export
 HuMMANet <- function(
   studies = NULL,
-  modalities = c("metadata", "species", "metabolome", "after_hummanet"),
+  modalities = HuMMANet_public_modality_names(),
   extdata_dir = NULL,
   drop_missing = TRUE,
   localHub = FALSE
