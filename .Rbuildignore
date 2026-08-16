@@ -17,3 +17,10 @@
 ^data-raw/curated_metabolome_list_highestCV_clean\.RData$
 ^data-raw/curated_metadata_list_df\.RData$
 ^data-raw/curated_normalized_species_data\.RData$
+^After_HuMMANet_by_study$
+^After_HuMMANet_by_study/
+^Before_HuMMANet_by_study$
+^Before_HuMMANet_by_study/
+^After_HuMANet\.RData$
+^Before_HuMMANet_Original_metabolome_profile\.RData$
+^all_studies_mapped_stage4\.xlsx$

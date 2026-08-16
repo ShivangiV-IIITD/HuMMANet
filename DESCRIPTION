@@ -1,19 +1,35 @@
 Package: HuMMANet
 Type: Package
 Title: HuMMANet
-biocViews: ExperimentData, ExperimentHub, Homo_sapiens_Data
-Version: 0.1.0
+biocViews: ExperimentData, ExperimentHub, Homo_sapiens_Data, Microbiome, Metabolomics
+Version: 0.99.0
 Author: Nalin Arora [aut, cre], Shivangi Verma [aut]
 Maintainer: Nalin Arora <nalin21478@iiitd.ac.in>
 Authors@R:
     c(
-      person("Nalin", "Arora", email = "nalin21478@iiitd.ac.in", role = c("aut", "cre")),
-      person("Shivangi", "Verma", email = "shivangiv@iiitd.ac.in", role = "aut")
+      person(
+        "Nalin", "Arora",
+        email = "nalin21478@iiitd.ac.in",
+        role = c("aut", "cre"),
+        comment = c(ORCID = "0009-0009-1340-688X")
+      ),
+      person(
+        "Shivangi", "Verma",
+        email = "shivangiv@iiitd.ac.in",
+        role = "aut",
+        comment = c(ORCID = "0009-0006-8505-0032")
+      )
     )
-Description: HuMMANet provides accessors for curated human
-    microbiome-metabolome study bundles distributed through
-    Bioconductor ExperimentHub, with a local development fallback for
-    generating and validating hub resources before submission.
+Description: HuMMANet provides access to curated paired human
+    microbiome-metabolome study bundles available in Bioconductor
+    ExperimentHub. The package organizes matched sample metadata,
+    species abundance profiles, original and harmonized metabolite
+    profiles, and study-specific annotation resources including
+    metabolite identifier mappings, microbial producer annotations,
+    disease associations, pathway annotations, and drug similarity
+    matches. HuMMANet is designed as a reusable Bioconductor data
+    resource for consistent and reproducible cross-study microbiome-
+    metabolome analyses.
 License: MIT + file LICENSE
 URL: https://github.com/Shivi-Verma29/HuMMANet
 BugReports: https://github.com/Shivi-Verma29/HuMMANet/issues

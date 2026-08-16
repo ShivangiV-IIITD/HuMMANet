@@ -20,16 +20,50 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-`HuMMANet` provides curated study-level tables for:
+`HuMMANet` is intended as a Bioconductor data resource for paired human
+microbiome-metabolome studies. It provides a unified interface to curated
+study-level species profiles, metabolite profiles, matched sample metadata, and
+study-specific annotation resources, with study data accessible through
+`ExperimentHub`.
 
-- metadata
-- species profiles
-- metabolome profiles
-- HuMMANet-processed metabolome profiles
+The central motivation for the package is to provide a reusable resource for
+paired study species and metabolite data together with supporting annotations,
+so that users can work with these studies in a consistent and reproducible way.
+Rather than manually assembling heterogeneous files from individual studies,
+users can access matched tables and annotation resources through a common API in
+the Bioconductor ecosystem.
+
+Each study bundle can include the following modalities:
+
+- `MetadataProfile`: sample-level study metadata, including sample identifiers,
+  subject or participant annotations, clinical covariates, longitudinal labels,
+  body site information, and other variables needed to interpret the study.
+- `taxaAbundanceProfile`: the curated microbial abundance table for a study,
+  aligned to the study samples and representing taxa or related microbial
+  features.
+- `OriginalMetaboliteProfile`: the curated metabolomics matrix prior to
+  HuMMANet harmonization, preserving the original study-specific metabolite
+  feature space.
+- `harmonizedMetaboliteProfile`: the HuMMANet-processed metabolomics matrix
+  after harmonization, designed to support more consistent comparisons across
+  studies.
+- `metaboliteIdentifierMapping`: metabolite identifier mapping tables that link
+  HuMMANet identifiers to external resources such as HMDB, PubChem, KEGG,
+  ChEBI, structural descriptors, and standardized metabolite names.
+- `microbialProducerAnnotations`: curated annotations linking metabolites to
+  potential microbial producers or species-level producer evidence.
+- `metaboliteDiseaseAssociations`: curated disease associations for metabolites
+  represented in a study.
+- `metabolitePathwayAnnotations`: curated pathway annotations for study
+  metabolites.
+- `drugBankSimilarityMatches`: DrugBank similarity matches for study
+  metabolites.
+- `drugCentralSimilarityMatches`: DrugCentral similarity matches for study
+  metabolites.
 
 The package is structured as a lightweight `ExperimentHub` interface package.
 Large study bundles are published outside the source tarball, while the package
-ships accessor functions, metadata, documentation, and hub-preparation scripts.
+ships accessor functions, metadata, and documentation.
 
 ## Installation
 
@@ -40,6 +74,15 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
 BiocManager::install("HuMMANet")
+```
+
+Install the development version from GitHub:
+
+```{r eval = FALSE}
+if (!requireNamespace("remotes", quietly = TRUE)) {
+    install.packages("remotes")
+}
+remotes::install_github("ShivangiV-IIITD/HuMMANet")
 ```
 
 ## Load the package
@@ -67,7 +110,15 @@ head(studies)
 
 ```{r}
 idx <- HuMMANet_study_index()
-head(idx[, c("study", "has_metadata", "has_species", "has_metabolome")])
+head(
+  idx[, c(
+    "study",
+    "has_MetadataProfile",
+    "has_taxaAbundanceProfile",
+    "has_OriginalMetaboliteProfile",
+    "has_harmonizedMetaboliteProfile"
+  )]
+)
 ```
 
 ## Load one study
@@ -84,16 +135,19 @@ names(one_study)
 ## Load one modality
 
 ```{r}
-meta <- HuMMANet_load_modality(study_id, "metadata")
-dim(meta)
-head(meta[, seq_len(min(6, ncol(meta)))])
+metadata_profile <- HuMMANet_load_modality(study_id, "MetadataProfile")
+dim(metadata_profile)
+head(metadata_profile[, seq_len(min(6, ncol(metadata_profile)))])
 ```
 
-## Load the HuMMANet-processed profile
+## Load the harmonized metabolite profile
 
 ```{r eval = FALSE}
-after_hummanet <- HuMMANet_load_modality(study_id, "after_hummanet")
-dim(after_hummanet)
+harmonized_profile <- HuMMANet_load_modality(
+  study_id,
+  "harmonizedMetaboliteProfile"
+)
+dim(harmonized_profile)
 ```
 
 ## Load multiple studies and modalities
@@ -102,25 +156,11 @@ dim(after_hummanet)
 selected_studies <- studies[seq_len(min(2, length(studies)))]
 multi <- HuMMANet(
     studies = selected_studies,
-    modalities = c("metadata", "metabolome")
+    modalities = c("MetadataProfile", "OriginalMetaboliteProfile")
 )
 
 names(multi)
 names(multi[[1]])
-```
-
-## Local hub-resource preparation
-
-For package development, the repository keeps local csv files outside the built
-source package. To generate per-study `after_hummanet` csv files, `.rds` study
-bundles, and a metadata template for submission to `ExperimentHub`, run:
-
-```{r eval = FALSE}
-source("inst/scripts/split_after_hummanet_by_study.R")
-split_after_hummanet_by_study()
-
-source("inst/scripts/make-experimenthub-resources.R")
-build_hummanet_experimenthub_resources()
 ```
 
 ## Session information

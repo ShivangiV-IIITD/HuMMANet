@@ -9,9 +9,11 @@
 \alias{HuMMANet_load_study}
 \title{HuMMANet ExperimentHub Access Functions}
 \description{
-Helpers to discover and load HuMMANet study data from Bioconductor
-\code{ExperimentHub}, with a local \code{extdata} fallback for package
-development and hub-resource generation.
+Helpers to discover and load HuMMANet paired microbiome-metabolome study
+data, including matched metadata, metabolite profiles, species profiles,
+and study-specific annotation resources. Published resources are retrieved
+through Bioconductor \code{ExperimentHub}, with a local \code{extdata}
+fallback available for development workflows.
 }
 \usage{
 HuMMANet(

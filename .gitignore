@@ -2,4 +2,8 @@
 *.Rcheck
 .Rhistory
 .RData
-
+*.xlsx
+After_HuMMANet_by_study/
+Before_HuMMANet_by_study/
+experimenthub/
+.DS_Store
