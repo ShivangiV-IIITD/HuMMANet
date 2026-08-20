@@ -69,6 +69,8 @@ remotes::install_github("Shivi-Verma29/HuMMANet")
 
 ```r
 library(HuMMANet)
+library(MultiAssayExperiment)
+library(SummarizedExperiment)
 
 # inspect the HuMMANet ExperimentHub subset
 hub <- HuMMANetHub()
@@ -103,14 +105,24 @@ dim(metadata_profile)
 
 # load one full study
 one_study <- HuMMANet_load_study("DawkinsJ_2022")
-names(one_study)
+class(one_study)
+names(experiments(one_study))
+nrow(colData(one_study))
 
 # load the harmonized metabolite profile for one study
 harmonized_profile <- HuMMANet_load_modality(
   "DawkinsJ_2022",
   "harmonizedMetaboliteProfile"
 )
-dim(harmonized_profile)
+class(harmonized_profile)
+dim(assay(harmonized_profile))
+
+# load an annotation table attached to the study object
+pathway_annotations <- HuMMANet_load_modality(
+  "DawkinsJ_2022",
+  "metabolitePathwayAnnotations"
+)
+dim(pathway_annotations)
 
 # load selected studies and modalities
 subset_data <- HuMMANet(
@@ -118,4 +130,5 @@ subset_data <- HuMMANet(
   modalities = c("MetadataProfile", "OriginalMetaboliteProfile")
 )
 names(subset_data)
+class(subset_data[[1]])
 ```

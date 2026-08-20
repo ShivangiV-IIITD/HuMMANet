@@ -108,11 +108,16 @@ test_that("available modalities and local study loading work", {
   )
 
   expect_true(all(c("MetadataProfile", "OriginalMetaboliteProfile") %in% modalities))
-  expect_named(loaded, c("MetadataProfile", "OriginalMetaboliteProfile"))
-  expect_s3_class(loaded$MetadataProfile, "data.frame")
-  expect_s3_class(loaded$OriginalMetaboliteProfile, "data.frame")
-  expect_gt(nrow(loaded$MetadataProfile), 0L)
-  expect_gt(nrow(loaded$OriginalMetaboliteProfile), 0L)
+  expect_s4_class(loaded, "MultiAssayExperiment")
+  expect_identical(
+    names(MultiAssayExperiment::experiments(loaded)),
+    "OriginalMetaboliteProfile"
+  )
+  expect_s4_class(
+    MultiAssayExperiment::experiments(loaded)[["OriginalMetaboliteProfile"]],
+    "SummarizedExperiment"
+  )
+  expect_gt(nrow(SummarizedExperiment::colData(loaded)), 0L)
 
   expect_error(
     HuMMANet_available_modalities("NoSuchStudy", extdata_dir = extdata_dir),
@@ -140,9 +145,26 @@ test_that("single modality and top-level loader work with local packaged data", 
 
   expect_s3_class(metadata_profile, "data.frame")
   expect_named(subset_data, c("WuY_2025", "DawkinsJ_2022"))
-  expect_named(
-    subset_data$WuY_2025,
-    c("MetadataProfile", "harmonizedMetaboliteProfile")
+  expect_s4_class(subset_data$WuY_2025, "MultiAssayExperiment")
+  expect_true(
+    "harmonizedMetaboliteProfile" %in%
+      names(MultiAssayExperiment::experiments(subset_data$WuY_2025))
+  )
+  expect_s4_class(
+    HuMMANet_load_modality(
+      "WuY_2025",
+      "harmonizedMetaboliteProfile",
+      extdata_dir = extdata_dir
+    ),
+    "SummarizedExperiment"
+  )
+  expect_s3_class(
+    HuMMANet_load_modality(
+      "WuY_2025",
+      "metabolitePathwayAnnotations",
+      extdata_dir = extdata_dir
+    ),
+    "data.frame"
   )
 
   expect_error(

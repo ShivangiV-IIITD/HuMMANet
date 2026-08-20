@@ -178,7 +178,7 @@ HuMMANet_local_study_index <- function(extdata_dir = NULL) {
 }
 
 # Internal helper: load a local study bundle from csv files.
-HuMMANet_load_study_local <- function(
+HuMMANet_load_study_tables_local <- function(
   study,
   modalities = HuMMANet_public_modality_names(),
   extdata_dir = NULL,
@@ -214,6 +214,196 @@ HuMMANet_load_study_local <- function(
   }
 
   loaded
+}
+
+# Internal helper: normalize a sample metadata table to DataFrame.
+HuMMANet_metadata_coldata <- function(metadata_df) {
+  if (!"sample_id" %in% colnames(metadata_df)) {
+    stop("MetadataProfile must contain a 'sample_id' column.")
+  }
+
+  sample_ids <- as.character(metadata_df$sample_id)
+  keep <- !is.na(sample_ids) & nzchar(sample_ids)
+  metadata_df <- metadata_df[keep, , drop = FALSE]
+  sample_ids <- sample_ids[keep]
+  rownames(metadata_df) <- sample_ids
+
+  S4Vectors::DataFrame(metadata_df, row.names = sample_ids)
+}
+
+# Internal helper: convert sample x feature table to feature x sample matrix.
+HuMMANet_assay_matrix <- function(table_df, sample_ids) {
+  if (!"sample_id" %in% colnames(table_df)) {
+    stop("Assay table must contain a 'sample_id' column.")
+  }
+
+  table_sample_ids <- as.character(table_df$sample_id)
+  keep <- !is.na(table_sample_ids) & nzchar(table_sample_ids)
+  table_df <- table_df[keep, , drop = FALSE]
+  table_sample_ids <- table_sample_ids[keep]
+
+  shared_ids <- intersect(sample_ids, table_sample_ids)
+  if (length(shared_ids) == 0) {
+    stop("No shared sample IDs found between metadata and assay table.")
+  }
+
+  sample_order <- match(shared_ids, table_sample_ids)
+  feature_df <- table_df[sample_order, setdiff(colnames(table_df), "sample_id"), drop = FALSE]
+  assay_mat <- t(as.matrix(feature_df))
+  storage.mode(assay_mat) <- "numeric"
+  colnames(assay_mat) <- shared_ids
+  rownames(assay_mat) <- colnames(feature_df)
+  assay_mat
+}
+
+# Internal helper: build basic rowData for a feature vector.
+HuMMANet_basic_rowdata <- function(feature_ids, column = "feature_id") {
+  rowdata <- data.frame(
+    feature_ids,
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+  )
+  colnames(rowdata) <- column
+  rownames(rowdata) <- feature_ids
+  S4Vectors::DataFrame(rowdata, row.names = feature_ids)
+}
+
+# Internal helper: build identifier mapping rowData for harmonized metabolites.
+HuMMANet_harmonized_rowdata <- function(feature_ids, mapping_df = NULL) {
+  if (is.null(mapping_df)) {
+    return(HuMMANet_basic_rowdata(feature_ids, column = "feature_id"))
+  }
+
+  keys <- if ("Query_Name" %in% colnames(mapping_df)) {
+    as.character(mapping_df$Query_Name)
+  } else {
+    rep(NA_character_, nrow(mapping_df))
+  }
+
+  row_idx <- match(feature_ids, keys)
+  matched <- mapping_df[row_idx, , drop = FALSE]
+  matched$feature_id <- feature_ids
+  rownames(matched) <- feature_ids
+  S4Vectors::DataFrame(matched, row.names = feature_ids)
+}
+
+# Internal helper: construct one SummarizedExperiment assay.
+HuMMANet_build_se <- function(
+  table_df,
+  coldata,
+  assay_name,
+  rowdata = NULL,
+  rowdata_column = "feature_id"
+) {
+  sample_ids <- rownames(coldata)
+  assay_mat <- HuMMANet_assay_matrix(table_df, sample_ids = sample_ids)
+  shared_ids <- colnames(assay_mat)
+  coldata <- coldata[shared_ids, , drop = FALSE]
+
+  if (is.null(rowdata)) {
+    rowdata <- HuMMANet_basic_rowdata(
+      rownames(assay_mat),
+      column = rowdata_column
+    )
+  } else {
+    rowdata <- rowdata[rownames(assay_mat), , drop = FALSE]
+  }
+
+  SummarizedExperiment::SummarizedExperiment(
+    assays = stats::setNames(list(assay_mat), assay_name),
+    rowData = rowdata,
+    colData = coldata
+  )
+}
+
+# Internal helper: identify the three assay modalities stored in MAE.
+HuMMANet_core_experiment_names <- function() {
+  c(
+    "taxaAbundanceProfile",
+    "OriginalMetaboliteProfile",
+    "harmonizedMetaboliteProfile"
+  )
+}
+
+# Internal helper: identify the long-form annotation modalities.
+HuMMANet_annotation_modality_names <- function() {
+  setdiff(
+    HuMMANet_public_modality_names(),
+    c("MetadataProfile", HuMMANet_core_experiment_names())
+  )
+}
+
+# Internal helper: build a study-level MultiAssayExperiment from raw tables.
+HuMMANet_build_study_mae <- function(
+  tables,
+  modalities = HuMMANet_public_modality_names(),
+  drop_missing = TRUE
+) {
+  metadata_df <- tables[["MetadataProfile"]]
+  if (is.null(metadata_df)) {
+    stop("MetadataProfile is required to build a study MultiAssayExperiment.")
+  }
+
+  coldata <- HuMMANet_metadata_coldata(metadata_df)
+  experiments <- list()
+  requested_core <- intersect(modalities, HuMMANet_core_experiment_names())
+  if (length(requested_core) == 0) {
+    requested_core <- intersect(names(tables), HuMMANet_core_experiment_names())
+  }
+
+  if ("taxaAbundanceProfile" %in% requested_core &&
+      !is.null(tables[["taxaAbundanceProfile"]])) {
+    experiments[["taxaAbundanceProfile"]] <- HuMMANet_build_se(
+      tables[["taxaAbundanceProfile"]],
+      coldata = coldata,
+      assay_name = "abundance",
+      rowdata_column = "taxon_id"
+    )
+  }
+
+  if ("OriginalMetaboliteProfile" %in% requested_core &&
+      !is.null(tables[["OriginalMetaboliteProfile"]])) {
+    experiments[["OriginalMetaboliteProfile"]] <- HuMMANet_build_se(
+      tables[["OriginalMetaboliteProfile"]],
+      coldata = coldata,
+      assay_name = "abundance",
+      rowdata_column = "metabolite_id"
+    )
+  }
+
+  if ("harmonizedMetaboliteProfile" %in% requested_core &&
+      !is.null(tables[["harmonizedMetaboliteProfile"]])) {
+    harm_table <- tables[["harmonizedMetaboliteProfile"]]
+    feature_ids <- setdiff(colnames(harm_table), "sample_id")
+    harm_rowdata <- HuMMANet_harmonized_rowdata(
+      feature_ids,
+      mapping_df = tables[["metaboliteIdentifierMapping"]]
+    )
+    experiments[["harmonizedMetaboliteProfile"]] <- HuMMANet_build_se(
+      harm_table,
+      coldata = coldata,
+      assay_name = "abundance",
+      rowdata = harm_rowdata
+    )
+  }
+
+  mae <- MultiAssayExperiment::MultiAssayExperiment(
+    experiments = experiments,
+    colData = coldata
+  )
+
+  annotation_names <- intersect(modalities, HuMMANet_annotation_modality_names())
+  mae_metadata <- S4Vectors::metadata(mae)
+  for (name in annotation_names) {
+    value <- tables[[name]]
+    if (is.null(value) && drop_missing) {
+      next
+    }
+    mae_metadata[[name]] <- value
+  }
+
+  S4Vectors::metadata(mae) <- mae_metadata
+  mae
 }
 
 #' HuMMANet ExperimentHub Records
@@ -366,7 +556,7 @@ HuMMANet_available_modalities <- function(
 #' @param modalities Character vector of modalities to load.
 #' @param drop_missing If `TRUE`, missing modalities are omitted from output.
 #'
-#' @return Named list of `data.frame` objects.
+#' @return A study-level `MultiAssayExperiment`.
 #' @export
 HuMMANet_load_study <- function(
   study,
@@ -376,12 +566,22 @@ HuMMANet_load_study <- function(
   localHub = FALSE
 ) {
   modalities <- HuMMANet_normalize_modalities(modalities)
+  staged_modalities <- unique(c(
+    "MetadataProfile",
+    HuMMANet_core_experiment_names(),
+    intersect(modalities, HuMMANet_annotation_modality_names())
+  ))
 
   if (!is.null(extdata_dir)) {
-    return(HuMMANet_load_study_local(
+    tables <- HuMMANet_load_study_tables_local(
       study = study,
-      modalities = modalities,
+      modalities = staged_modalities,
       extdata_dir = extdata_dir,
+      drop_missing = FALSE
+    )
+    return(HuMMANet_build_study_mae(
+      tables = tables,
+      modalities = modalities,
       drop_missing = drop_missing
     ))
   }
@@ -402,20 +602,35 @@ HuMMANet_load_study <- function(
       )
     }
 
-    return(HuMMANet_load_study_local(
+    tables <- HuMMANet_load_study_tables_local(
       study = study,
-      modalities = modalities,
+      modalities = staged_modalities,
       extdata_dir = extdata_dir,
+      drop_missing = FALSE
+    )
+    return(HuMMANet_build_study_mae(
+      tables = tables,
+      modalities = modalities,
       drop_missing = drop_missing
     ))
   }
 
-  loaded <- bundle[modalities]
-  if (drop_missing) {
-    loaded <- loaded[!vapply(loaded, is.null, logical(1))]
+  if (inherits(bundle, "MultiAssayExperiment")) {
+    return(bundle)
   }
 
-  loaded
+  if (is.list(bundle)) {
+    return(HuMMANet_build_study_mae(
+      tables = bundle,
+      modalities = modalities,
+      drop_missing = drop_missing
+    ))
+  }
+
+  stop(
+    "Unsupported HuMMANet study bundle class: ",
+    paste(class(bundle), collapse = "/")
+  )
 }
 
 #' Load a Single Modality for One Study
@@ -424,7 +639,8 @@ HuMMANet_load_study <- function(
 #' @param modality One public HuMMANet modality name.
 #' @param allow_missing If `TRUE`, return `NULL` when modality is missing.
 #'
-#' @return A `data.frame` or `NULL` if missing and `allow_missing = TRUE`.
+#' @return A `DataFrame`, `SummarizedExperiment`, annotation `data.frame`, or
+#'   `NULL` if missing and `allow_missing = TRUE`.
 #' @export
 HuMMANet_load_modality <- function(
   study,
@@ -437,20 +653,26 @@ HuMMANet_load_modality <- function(
 
   study_data <- HuMMANet_load_study(
     study = study,
-    modalities = modality,
+    modalities = unique(c("MetadataProfile", modality)),
     extdata_dir = extdata_dir,
-    drop_missing = allow_missing,
+    drop_missing = TRUE,
     localHub = localHub
   )
 
-  if (!modality %in% names(study_data)) {
-    if (allow_missing) {
-      return(NULL)
-    }
+  if (identical(modality, "MetadataProfile")) {
+    return(as.data.frame(SummarizedExperiment::colData(study_data)))
+  }
+
+  if (modality %in% names(MultiAssayExperiment::experiments(study_data))) {
+    return(MultiAssayExperiment::experiments(study_data)[[modality]])
+  }
+
+  value <- S4Vectors::metadata(study_data)[[modality]]
+  if (is.null(value) && !allow_missing) {
     stop("No ", modality, " data available for study ", study)
   }
 
-  study_data[[modality]]
+  value
 }
 
 #' HuMMANet Accessor
@@ -460,7 +682,8 @@ HuMMANet_load_modality <- function(
 #' @inheritParams HuMMANet_load_study
 #' @param studies Optional character vector of studies to load. Defaults to all.
 #'
-#' @return Named list keyed by study, where each element is a modality list.
+#' @return Named list keyed by study, where each element is a
+#'   `MultiAssayExperiment`.
 #' @export
 HuMMANet <- function(
   studies = NULL,

@@ -16,11 +16,22 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+if (!requireNamespace("HuMMANet", quietly = TRUE)) {
+  if (requireNamespace("devtools", quietly = TRUE)) {
+    devtools::load_all(".")
+  } else {
+    stop(
+      "Package 'HuMMANet' is not installed. ",
+      "Install the package or install 'devtools' to render the vignette from source."
+    )
+  }
+}
 ```
 
 ## Introduction
 
-`HuMMANet` is intended as a Bioconductor data resource for paired human
+`HuMMANet` is a Bioconductor data resource for paired human
 microbiome-metabolome studies. It provides a unified interface to curated
 study-level species profiles, metabolite profiles, matched sample metadata, and
 study-specific annotation resources, with study data accessible through
@@ -32,6 +43,17 @@ so that users can work with these studies in a consistent and reproducible way.
 Rather than manually assembling heterogeneous files from individual studies,
 users can access matched tables and annotation resources through a common API in
 the Bioconductor ecosystem.
+
+Typical use cases for `HuMMANet` include:
+
+- loading matched microbiome and metabolome data for a single study without
+  manually reconciling sample identifiers
+- comparing harmonized metabolite profiles across multiple studies
+- linking quantitative metabolite features to identifier mappings, pathway
+  annotations, disease associations, microbial producer annotations, and drug
+  similarity resources
+- extracting assay matrices and sample metadata for downstream statistical or
+  machine learning workflows
 
 Each study bundle can include the following modalities:
 
@@ -61,6 +83,34 @@ Each study bundle can include the following modalities:
 - `drugCentralSimilarityMatches`: DrugCentral similarity matches for study
   metabolites.
 
+Each study is represented as a `MultiAssayExperiment` object:
+
+- `colData()` stores the `MetadataProfile`
+- `experiments()` stores assay-level containers for
+  `taxaAbundanceProfile`, `OriginalMetaboliteProfile`, and
+  `harmonizedMetaboliteProfile`
+- long-form annotation tables are attached in `metadata()`
+
+This representation is useful because it keeps the paired modalities for a
+study synchronized through a shared sample-level metadata table while still
+allowing each assay to preserve its own feature space and feature annotations.
+For example, microbial taxa and metabolites do not share the same rows, but
+they do share the same study samples. `MultiAssayExperiment` is designed
+exactly for this setting.
+
+Within each study object:
+
+- `taxaAbundanceProfile` is stored as a `SummarizedExperiment` containing a
+  taxa-by-sample abundance matrix.
+- `OriginalMetaboliteProfile` is stored as a `SummarizedExperiment` containing
+  the original curated metabolite feature table for the study.
+- `harmonizedMetaboliteProfile` is stored as a `SummarizedExperiment`
+  containing the harmonized metabolite table together with feature-level
+  identifier annotations in `rowData()`.
+- long-form annotation resources such as pathway, disease, microbial producer,
+  and drug similarity tables are attached in `metadata()` because they are
+  annotation tables rather than sample-by-feature assay matrices.
+
 The package is structured as a lightweight `ExperimentHub` interface package.
 Large study bundles are published outside the source tarball, while the package
 ships accessor functions, metadata, and documentation.
@@ -82,13 +132,15 @@ Install the development version from GitHub:
 if (!requireNamespace("remotes", quietly = TRUE)) {
     install.packages("remotes")
 }
-remotes::install_github("ShivangiV-IIITD/HuMMANet")
+remotes::install_github("Shivi-Verma29/HuMMANet")
 ```
 
 ## Load the package
 
 ```{r}
 library(HuMMANet)
+library(MultiAssayExperiment)
+library(SummarizedExperiment)
 ```
 
 ## Connect to ExperimentHub
@@ -106,6 +158,11 @@ length(studies)
 head(studies)
 ```
 
+The study identifiers returned by `HuMMANet_studies()` are the main entry points
+for downstream loading. These identifiers are also present in the study index,
+which can be used to inspect available modalities before loading a full study
+object.
+
 ## Inspect the study index
 
 ```{r}
@@ -121,6 +178,12 @@ head(
 )
 ```
 
+The study index provides one row per study. In addition to the study identifier,
+it records availability flags and file-level information for the metadata,
+species, original metabolite, harmonized metabolite, and annotation resources.
+This is useful when deciding which studies and which data layers to retrieve
+for a particular analysis.
+
 ## Load one study
 
 ```{r}
@@ -129,10 +192,30 @@ available <- HuMMANet_available_modalities(study_id)
 available
 
 one_study <- HuMMANet_load_study(study_id)
-names(one_study)
+class(one_study)
+names(experiments(one_study))
+colData(one_study)[1:3, 1:6]
 ```
 
-## Load one modality
+At this point `one_study` is a `MultiAssayExperiment`. The assay names returned
+by `experiments(one_study)` correspond to the core quantitative data layers,
+while `colData(one_study)` contains the matched sample metadata shared across
+those assays.
+
+## Inspect the study structure
+
+```{r}
+experiments(one_study)
+sampleMap(one_study)
+```
+
+`experiments(one_study)` lists the assay-level objects stored in the study.
+Each of these is a `SummarizedExperiment`, so standard Bioconductor accessors
+such as `assay()`, `rowData()`, and `colData()` can be used on the individual
+assays. `sampleMap(one_study)` records how assay-level columns map back to the
+shared study-level sample metadata.
+
+## Load the study metadata
 
 ```{r}
 metadata_profile <- HuMMANet_load_modality(study_id, "MetadataProfile")
@@ -140,15 +223,122 @@ dim(metadata_profile)
 head(metadata_profile[, seq_len(min(6, ncol(metadata_profile)))])
 ```
 
+This is equivalent to inspecting `as.data.frame(colData(one_study))`, but the
+modality accessor is convenient when you want the metadata table directly for
+custom joins or downstream analysis.
+
+## Inspect the original metabolite profile
+
+```{r}
+original_profile <- HuMMANet_load_modality(
+  study_id,
+  "OriginalMetaboliteProfile"
+)
+class(original_profile)
+dim(assay(original_profile))
+head(rownames(original_profile))
+head(colnames(original_profile))
+```
+
+The quantitative assay matrix is accessed with `assay(original_profile)`. As in
+all `SummarizedExperiment` objects, rows correspond to features and columns
+correspond to samples. This makes it straightforward to extract the original
+study-specific metabolite matrix while preserving its feature identities.
+
 ## Load the harmonized metabolite profile
 
-```{r eval = FALSE}
+```{r}
 harmonized_profile <- HuMMANet_load_modality(
   study_id,
   "harmonizedMetaboliteProfile"
 )
-dim(harmonized_profile)
+class(harmonized_profile)
+dim(assay(harmonized_profile))
+head(
+  rowData(harmonized_profile)[, seq_len(min(6, ncol(rowData(harmonized_profile))))]
+)
 ```
+
+The harmonized metabolite profile is especially useful for cross-study
+comparison because the feature layer is paired with identifier-level annotation
+in `rowData(harmonized_profile)`. This allows users to inspect harmonized
+metabolite identifiers, names, and external database mappings alongside the
+quantitative matrix.
+
+## Inspect the taxa abundance profile
+
+```{r}
+taxa_profile <- HuMMANet_load_modality(
+  study_id,
+  "taxaAbundanceProfile"
+)
+class(taxa_profile)
+dim(assay(taxa_profile))
+head(rownames(taxa_profile))
+head(colnames(taxa_profile))
+```
+
+This assay stores the microbial feature abundance matrix for the study. Because
+it is also represented as a `SummarizedExperiment`, it can be handled with the
+same accessors as the metabolite assays, which keeps the study workflow
+consistent across modalities.
+
+## Load an annotation table
+
+```{r}
+pathway_annotations <- HuMMANet_load_modality(
+  study_id,
+  "metabolitePathwayAnnotations"
+)
+dim(pathway_annotations)
+head(pathway_annotations[, seq_len(min(6, ncol(pathway_annotations)))])
+```
+
+Unlike the assay modalities, annotation resources such as pathways, diseases,
+microbial producer annotations, and drug similarity matches are long-form
+tables. They are returned as `data.frame` objects because they are naturally
+represented as annotations rather than sample-by-feature matrices.
+
+## Inspect study-level annotation metadata
+
+```{r}
+names(metadata(one_study))
+```
+
+The `metadata()` slot of the study object stores the annotation resources that
+were requested during loading. This is helpful when you want to keep the study
+object intact and access all associated annotation layers from a single
+container instead of managing separate tables manually.
+
+## Extract assay matrices for downstream analysis
+
+```{r}
+harm_mat <- assay(harmonized_profile)
+taxa_mat <- assay(taxa_profile)
+
+dim(harm_mat)
+dim(taxa_mat)
+```
+
+These extracted matrices can be used directly in downstream workflows for
+ordination, association testing, machine learning, or other custom analyses.
+The companion `rowData()` and `colData()` accessors preserve the feature-level
+and sample-level context required for reproducible analysis.
+
+## Subset a study object
+
+```{r}
+sample_keep <- rownames(colData(one_study))[seq_len(min(5, nrow(colData(one_study))))]
+study_subset <- one_study[, sample_keep]
+
+study_subset
+```
+
+Subsetting a `MultiAssayExperiment` by columns subsets the shared sample space
+and keeps the assay-level containers synchronized. This is one of the main
+advantages of using standard Bioconductor containers for paired multi-omics
+data, because users do not need to manually subset each assay and metadata
+table separately.
 
 ## Load multiple studies and modalities
 
@@ -160,8 +350,13 @@ multi <- HuMMANet(
 )
 
 names(multi)
-names(multi[[1]])
+class(multi[[1]])
+names(experiments(multi[[1]]))
 ```
+
+The top-level `HuMMANet()` convenience function returns a named list of
+study-level `MultiAssayExperiment` objects. This is useful when iterating across
+multiple studies while preserving the same container structure for each one.
 
 ## Session information
 

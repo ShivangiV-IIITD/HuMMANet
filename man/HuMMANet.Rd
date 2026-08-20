@@ -121,11 +121,13 @@ HuMMANet_load_study(
   \item \code{HuMMANet_studies}: character vector of study identifiers.
   \item \code{HuMMANet_available_modalities}: character vector of available
   modalities.
-  \item \code{HuMMANet_load_modality}: one modality table as a
-  \code{data.frame}.
-  \item \code{HuMMANet_load_study}: named list of modality tables for one
-  study.
-  \item \code{HuMMANet}: named list keyed by study.
+  \item \code{HuMMANet_load_modality}: one modality returned as either a
+  sample metadata \code{data.frame}, a \code{SummarizedExperiment}, or an
+  annotation \code{data.frame}, depending on the selected modality.
+  \item \code{HuMMANet_load_study}: one study as a
+  \code{MultiAssayExperiment}.
+  \item \code{HuMMANet}: named list of \code{MultiAssayExperiment} objects
+  keyed by study.
 }
 }
 \examples{
@@ -141,7 +143,8 @@ head(HuMMANet_studies())
 # Load one study
 \dontrun{
 x <- HuMMANet_load_study("FranzosaE_2019")
-names(x)
+class(x)
+names(MultiAssayExperiment::experiments(x))
 
 # Load selected studies and modalities
 subset_data <- HuMMANet(

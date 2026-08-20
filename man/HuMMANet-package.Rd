@@ -13,8 +13,13 @@ disease associations, pathway annotations, and drug similarity matches.
 \details{
 Study resources are designed to support reproducible access to paired
 species and metabolite data across studies through a consistent set of
-functions. HuMMANet data can be discovered and retrieved from Bioconductor
-\code{ExperimentHub} using convenience accessors such as
+functions. Each study is represented as a
+\code{MultiAssayExperiment::MultiAssayExperiment} with matched sample
+metadata stored in \code{colData()}, assay-level species and metabolite
+profiles stored in \code{experiments()}, and long-form annotation tables
+attached in \code{metadata()}. HuMMANet data can be discovered and
+retrieved from Bioconductor \code{ExperimentHub} using convenience
+accessors such as
 \code{\link{HuMMANetHub}}, \code{\link{HuMMANet_studies}},
 \code{\link{HuMMANet_study_index}}, \code{\link{HuMMANet_load_modality}},
 and \code{\link{HuMMANet_load_study}}.

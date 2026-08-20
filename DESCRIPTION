@@ -37,7 +37,9 @@ Encoding: UTF-8
 LazyData: false
 Imports:
     ExperimentHub,
+    MultiAssayExperiment,
     S4Vectors,
+    SummarizedExperiment,
     stats,
     utils
 Suggests:
