@@ -132,7 +132,7 @@ Install the development version from GitHub:
 if (!requireNamespace("remotes", quietly = TRUE)) {
     install.packages("remotes")
 }
-remotes::install_github("Shivi-Verma29/HuMMANet")
+remotes::install_github("ShivangiV-IIITD/HuMMANet")
 ```
 
 ## Load the package
