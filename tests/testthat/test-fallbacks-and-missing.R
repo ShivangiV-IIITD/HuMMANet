@@ -77,11 +77,21 @@ test_that("available modalities can be inferred from file columns when has colum
     extdata_dir = extdata_dir
   )
 
-  expect_identical(modalities, "MetadataProfile")
+  expect_identical(
+    modalities,
+    c(
+      "MetadataProfile",
+      "taxaAbundanceProfile",
+      "OriginalMetaboliteProfile",
+      "harmonizedMetaboliteProfile",
+      "metaboliteIdentifierMapping",
+      "metabolitePathwayAnnotations"
+    )
+  )
 })
 
 test_that("resource table and default accessors fall back to local resources", {
-  extdata_dir <- local_extdata_dir()
+  extdata_dir <- make_minimal_extdata()
 
   testthat::local_mocked_bindings(
     HuMMANet_load_hub_record = function(...) stop("hub unavailable"),
@@ -93,7 +103,7 @@ test_that("resource table and default accessors fall back to local resources", {
   resource_table <- HuMMANet_resource_table(extdata_dir = extdata_dir)
   index <- HuMMANet_study_index()
   study_data <- HuMMANet_load_study(
-    "WuY_2025",
+    "MiniStudy_2026",
     modalities = "MetadataProfile"
   )
 

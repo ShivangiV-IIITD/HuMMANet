@@ -18,15 +18,19 @@ knitr::opts_chunk$set(
 )
 
 if (!requireNamespace("HuMMANet", quietly = TRUE)) {
-  if (requireNamespace("devtools", quietly = TRUE)) {
-    devtools::load_all(".")
-  } else {
-    stop(
-      "Package 'HuMMANet' is not installed. ",
-      "Install the package or install 'devtools' to render the vignette from source."
-    )
+  stop("Package 'HuMMANet' must be installed to render this vignette.")
+}
+
+hummanet_extdata_dir <- NULL
+for (candidate in c("inst/extdata", "../inst/extdata")) {
+  if (dir.exists(candidate)) {
+    hummanet_extdata_dir <- normalizePath(candidate, mustWork = TRUE)
+    break
   }
 }
+
+hummanet_has_local_studies <- !is.null(hummanet_extdata_dir) &&
+  dir.exists(file.path(hummanet_extdata_dir, "studies"))
 ```
 
 ## Introduction
@@ -153,7 +157,7 @@ hub
 ## Discover available studies
 
 ```{r}
-studies <- HuMMANet_studies()
+studies <- HuMMANet_studies(extdata_dir = hummanet_extdata_dir)
 length(studies)
 head(studies)
 ```
@@ -166,7 +170,7 @@ object.
 ## Inspect the study index
 
 ```{r}
-idx <- HuMMANet_study_index()
+idx <- HuMMANet_study_index(extdata_dir = hummanet_extdata_dir)
 head(
   idx[, c(
     "study",
@@ -184,14 +188,25 @@ species, original metabolite, harmonized metabolite, and annotation resources.
 This is useful when deciding which studies and which data layers to retrieve
 for a particular analysis.
 
+The study-loading examples below require either published HuMMANet
+`ExperimentHub` study bundles or a local development checkout that still
+contains `inst/extdata/studies`. Before the Zenodo-backed resources are
+published, those chunks are shown but not executed during package checks.
+
 ## Load one study
 
-```{r}
+```{r eval = hummanet_has_local_studies}
 study_id <- idx$study[[1]]
-available <- HuMMANet_available_modalities(study_id)
+available <- HuMMANet_available_modalities(
+  study_id,
+  extdata_dir = hummanet_extdata_dir
+)
 available
 
-one_study <- HuMMANet_load_study(study_id)
+one_study <- HuMMANet_load_study(
+  study_id,
+  extdata_dir = hummanet_extdata_dir
+)
 class(one_study)
 names(experiments(one_study))
 colData(one_study)[1:3, 1:6]
@@ -204,7 +219,7 @@ those assays.
 
 ## Inspect the study structure
 
-```{r}
+```{r eval = hummanet_has_local_studies}
 experiments(one_study)
 sampleMap(one_study)
 ```
@@ -217,8 +232,12 @@ shared study-level sample metadata.
 
 ## Load the study metadata
 
-```{r}
-metadata_profile <- HuMMANet_load_modality(study_id, "MetadataProfile")
+```{r eval = hummanet_has_local_studies}
+metadata_profile <- HuMMANet_load_modality(
+  study_id,
+  "MetadataProfile",
+  extdata_dir = hummanet_extdata_dir
+)
 dim(metadata_profile)
 head(metadata_profile[, seq_len(min(6, ncol(metadata_profile)))])
 ```
@@ -229,10 +248,11 @@ custom joins or downstream analysis.
 
 ## Inspect the original metabolite profile
 
-```{r}
+```{r eval = hummanet_has_local_studies}
 original_profile <- HuMMANet_load_modality(
   study_id,
-  "OriginalMetaboliteProfile"
+  "OriginalMetaboliteProfile",
+  extdata_dir = hummanet_extdata_dir
 )
 class(original_profile)
 dim(assay(original_profile))
@@ -247,10 +267,11 @@ study-specific metabolite matrix while preserving its feature identities.
 
 ## Load the harmonized metabolite profile
 
-```{r}
+```{r eval = hummanet_has_local_studies}
 harmonized_profile <- HuMMANet_load_modality(
   study_id,
-  "harmonizedMetaboliteProfile"
+  "harmonizedMetaboliteProfile",
+  extdata_dir = hummanet_extdata_dir
 )
 class(harmonized_profile)
 dim(assay(harmonized_profile))
@@ -267,10 +288,11 @@ quantitative matrix.
 
 ## Inspect the taxa abundance profile
 
-```{r}
+```{r eval = hummanet_has_local_studies}
 taxa_profile <- HuMMANet_load_modality(
   study_id,
-  "taxaAbundanceProfile"
+  "taxaAbundanceProfile",
+  extdata_dir = hummanet_extdata_dir
 )
 class(taxa_profile)
 dim(assay(taxa_profile))
@@ -285,10 +307,11 @@ consistent across modalities.
 
 ## Load an annotation table
 
-```{r}
+```{r eval = hummanet_has_local_studies}
 pathway_annotations <- HuMMANet_load_modality(
   study_id,
-  "metabolitePathwayAnnotations"
+  "metabolitePathwayAnnotations",
+  extdata_dir = hummanet_extdata_dir
 )
 dim(pathway_annotations)
 head(pathway_annotations[, seq_len(min(6, ncol(pathway_annotations)))])
@@ -301,7 +324,7 @@ represented as annotations rather than sample-by-feature matrices.
 
 ## Inspect study-level annotation metadata
 
-```{r}
+```{r eval = hummanet_has_local_studies}
 names(metadata(one_study))
 ```
 
@@ -312,7 +335,7 @@ container instead of managing separate tables manually.
 
 ## Extract assay matrices for downstream analysis
 
-```{r}
+```{r eval = hummanet_has_local_studies}
 harm_mat <- assay(harmonized_profile)
 taxa_mat <- assay(taxa_profile)
 
@@ -327,7 +350,7 @@ and sample-level context required for reproducible analysis.
 
 ## Subset a study object
 
-```{r}
+```{r eval = hummanet_has_local_studies}
 sample_keep <- rownames(colData(one_study))[seq_len(min(5, nrow(colData(one_study))))]
 study_subset <- one_study[, sample_keep]
 
@@ -342,11 +365,12 @@ table separately.
 
 ## Load multiple studies and modalities
 
-```{r}
+```{r eval = hummanet_has_local_studies}
 selected_studies <- studies[seq_len(min(2, length(studies)))]
 multi <- HuMMANet(
     studies = selected_studies,
-    modalities = c("MetadataProfile", "OriginalMetaboliteProfile")
+    modalities = c("MetadataProfile", "OriginalMetaboliteProfile"),
+    extdata_dir = hummanet_extdata_dir
 )
 
 names(multi)

@@ -201,7 +201,7 @@ HuMMANet_load_study_tables_local <- function(
     file_col <- paste0(modality, "_file")
     rel_path <- row[[file_col]][1]
 
-    if (!nzchar(rel_path)) {
+    if (is.na(rel_path) || !nzchar(rel_path)) {
       loaded[[modality]] <- NULL
       next
     }
@@ -535,7 +535,8 @@ HuMMANet_available_modalities <- function(
 
       file_col <- paste0(x, "_file")
       if (file_col %in% colnames(row)) {
-        return(nzchar(row[[file_col]][1]))
+        value <- row[[file_col]][1]
+        return(!is.na(value) && nzchar(value))
       }
 
       FALSE

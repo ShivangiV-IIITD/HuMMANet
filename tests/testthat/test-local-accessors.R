@@ -1,5 +1,5 @@
 test_that("local extdata helpers resolve expected paths", {
-  extdata_dir <- local_extdata_dir()
+  extdata_dir <- make_minimal_extdata()
 
   expect_true(HuMMANet:::HuMMANet_local_data_available(extdata_dir))
   expect_equal(
@@ -62,7 +62,7 @@ test_that("public modality names are stable and valid", {
 })
 
 test_that("manifest and study index can be read locally", {
-  extdata_dir <- local_extdata_dir()
+  extdata_dir <- make_minimal_extdata()
 
   manifest <- HuMMANet:::HuMMANet_hub_manifest(extdata_dir)
   index <- HuMMANet:::HuMMANet_local_study_index(extdata_dir)
@@ -71,7 +71,7 @@ test_that("manifest and study index can be read locally", {
   expect_s3_class(manifest, "data.frame")
   expect_s3_class(index, "data.frame")
   expect_gt(nrow(manifest), 1L)
-  expect_gt(nrow(index), 1L)
+  expect_equal(nrow(index), 2L)
   expect_identical(row$record_type[[1]], "study_index")
   expect_error(
     HuMMANet:::HuMMANet_manifest_row("not_a_record", extdata_dir = extdata_dir),
@@ -80,7 +80,7 @@ test_that("manifest and study index can be read locally", {
 })
 
 test_that("study index and study listing work with local packaged data", {
-  extdata_dir <- local_extdata_dir()
+  extdata_dir <- make_minimal_extdata()
   index <- HuMMANet_study_index(extdata_dir = extdata_dir)
   studies <- HuMMANet_studies(extdata_dir = extdata_dir)
 
@@ -93,12 +93,12 @@ test_that("study index and study listing work with local packaged data", {
     "harmonizedMetaboliteProfile_file"
   ) %in% names(index)))
   expect_equal(studies, unique(index$study))
-  expect_gt(length(studies), 10L)
+  expect_equal(length(studies), 2L)
 })
 
 test_that("available modalities and local study loading work", {
-  extdata_dir <- local_extdata_dir()
-  study <- "WuY_2025"
+  extdata_dir <- make_minimal_extdata()
+  study <- "MiniStudy_2026"
 
   modalities <- HuMMANet_available_modalities(study, extdata_dir = extdata_dir)
   loaded <- HuMMANet_load_study(
@@ -130,29 +130,29 @@ test_that("available modalities and local study loading work", {
 })
 
 test_that("single modality and top-level loader work with local packaged data", {
-  extdata_dir <- local_extdata_dir()
+  extdata_dir <- make_minimal_extdata()
 
   metadata_profile <- HuMMANet_load_modality(
-    "WuY_2025",
+    "MiniStudy_2026",
     "MetadataProfile",
     extdata_dir = extdata_dir
   )
   subset_data <- HuMMANet(
-    studies = c("WuY_2025", "DawkinsJ_2022"),
+    studies = c("MiniStudy_2026", "MiniStudyB_2026"),
     modalities = c("MetadataProfile", "harmonizedMetaboliteProfile"),
     extdata_dir = extdata_dir
   )
 
   expect_s3_class(metadata_profile, "data.frame")
-  expect_named(subset_data, c("WuY_2025", "DawkinsJ_2022"))
-  expect_s4_class(subset_data$WuY_2025, "MultiAssayExperiment")
+  expect_named(subset_data, c("MiniStudy_2026", "MiniStudyB_2026"))
+  expect_s4_class(subset_data$MiniStudy_2026, "MultiAssayExperiment")
   expect_true(
     "harmonizedMetaboliteProfile" %in%
-      names(MultiAssayExperiment::experiments(subset_data$WuY_2025))
+      names(MultiAssayExperiment::experiments(subset_data$MiniStudy_2026))
   )
   expect_s4_class(
     HuMMANet_load_modality(
-      "WuY_2025",
+      "MiniStudy_2026",
       "harmonizedMetaboliteProfile",
       extdata_dir = extdata_dir
     ),
@@ -160,7 +160,7 @@ test_that("single modality and top-level loader work with local packaged data", 
   )
   expect_s3_class(
     HuMMANet_load_modality(
-      "WuY_2025",
+      "MiniStudy_2026",
       "metabolitePathwayAnnotations",
       extdata_dir = extdata_dir
     ),
@@ -168,7 +168,7 @@ test_that("single modality and top-level loader work with local packaged data", 
   )
 
   expect_error(
-    HuMMANet_load_modality("WuY_2025", "metadata", extdata_dir = extdata_dir),
+    HuMMANet_load_modality("MiniStudy_2026", "metadata", extdata_dir = extdata_dir),
     "'arg' should be one of"
   )
   expect_error(

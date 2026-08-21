@@ -18,18 +18,7 @@ fallback available for development workflows.
 \usage{
 HuMMANet(
   studies = NULL,
-  modalities = c(
-    "MetadataProfile",
-    "taxaAbundanceProfile",
-    "OriginalMetaboliteProfile",
-    "harmonizedMetaboliteProfile",
-    "metaboliteIdentifierMapping",
-    "microbialProducerAnnotations",
-    "metaboliteDiseaseAssociations",
-    "metabolitePathwayAnnotations",
-    "drugBankSimilarityMatches",
-    "drugCentralSimilarityMatches"
-  ),
+  modalities = HuMMANet_public_modality_names(),
   extdata_dir = NULL,
   drop_missing = TRUE,
   localHub = FALSE
@@ -47,18 +36,7 @@ HuMMANet_available_modalities(study, extdata_dir = NULL, localHub = FALSE)
 
 HuMMANet_load_modality(
   study,
-  modality = c(
-    "MetadataProfile",
-    "taxaAbundanceProfile",
-    "OriginalMetaboliteProfile",
-    "harmonizedMetaboliteProfile",
-    "metaboliteIdentifierMapping",
-    "microbialProducerAnnotations",
-    "metaboliteDiseaseAssociations",
-    "metabolitePathwayAnnotations",
-    "drugBankSimilarityMatches",
-    "drugCentralSimilarityMatches"
-  ),
+  modality = HuMMANet_public_modality_names(),
   extdata_dir = NULL,
   allow_missing = FALSE,
   localHub = FALSE
@@ -66,18 +44,7 @@ HuMMANet_load_modality(
 
 HuMMANet_load_study(
   study,
-  modalities = c(
-    "MetadataProfile",
-    "taxaAbundanceProfile",
-    "OriginalMetaboliteProfile",
-    "harmonizedMetaboliteProfile",
-    "metaboliteIdentifierMapping",
-    "microbialProducerAnnotations",
-    "metaboliteDiseaseAssociations",
-    "metabolitePathwayAnnotations",
-    "drugBankSimilarityMatches",
-    "drugCentralSimilarityMatches"
-  ),
+  modalities = HuMMANet_public_modality_names(),
   extdata_dir = NULL,
   drop_missing = TRUE,
   localHub = FALSE

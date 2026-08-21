@@ -3,8 +3,6 @@ Type: Package
 Title: HuMMANet
 biocViews: ExperimentData, ExperimentHub, Homo_sapiens_Data, Microbiome, Metabolomics
 Version: 0.99.0
-Author: Nalin Arora [aut, cre], Shivangi Verma [aut]
-Maintainer: Nalin Arora <nalin21478@iiitd.ac.in>
 Authors@R:
     c(
       person(
