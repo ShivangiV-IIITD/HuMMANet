@@ -112,6 +112,21 @@ HuMMANet_hub_manifest <- function(extdata_dir = NULL) {
   )
 }
 
+# Internal helper: read packaged ExperimentHub-style metadata table.
+HuMMANet_metadata_table <- function(extdata_dir = NULL) {
+  extdata_dir <- HuMMANet_normalize_extdata_dir(extdata_dir, require_studies = FALSE)
+  metadata_path <- file.path(extdata_dir, "metadata.csv")
+  if (!file.exists(metadata_path)) {
+    stop("Missing HuMMANet metadata table: ", metadata_path)
+  }
+
+  utils::read.csv(
+    metadata_path,
+    check.names = FALSE,
+    stringsAsFactors = FALSE
+  )
+}
+
 # Internal helper: find a manifest row for a study or shared record.
 HuMMANet_manifest_row <- function(record_type, study = NULL, extdata_dir = NULL) {
   manifest <- HuMMANet_hub_manifest(extdata_dir = extdata_dir)
@@ -139,7 +154,17 @@ HuMMANet_fetch_hub <- function(localHub = FALSE) {
   }
 
   hub <- ExperimentHub::ExperimentHub(localHub = localHub)
-  hub[hub$package == "HuMMANet"]
+  hub_cols <- colnames(as.data.frame(S4Vectors::mcols(hub)))
+  package_col <- intersect(c("Package", "package"), hub_cols)
+
+  if (length(package_col) == 0) {
+    stop(
+      "Could not find a package metadata column in the current ",
+      "ExperimentHub resource table."
+    )
+  }
+
+  hub[hub[[package_col[[1]]]] == "HuMMANet"]
 }
 
 # Internal helper: load one ExperimentHub record by its manifest title.
@@ -157,6 +182,33 @@ HuMMANet_load_hub_record <- function(record_type, study = NULL, localHub = FALSE
   }
 
   matches[[1]]
+}
+
+# Internal helper: read one RDS bundle directly from SourceUrl metadata.
+HuMMANet_load_remote_record <- function(record_type, study = NULL, extdata_dir = NULL) {
+  manifest_row <- HuMMANet_manifest_row(
+    record_type = record_type,
+    study = study,
+    extdata_dir = extdata_dir
+  )
+  metadata <- HuMMANet_metadata_table(extdata_dir = extdata_dir)
+  metadata_row <- metadata[metadata$Title == manifest_row$title[[1]], , drop = FALSE]
+
+  if (nrow(metadata_row) == 0) {
+    target <- if (is.null(study)) record_type else paste0(record_type, " for ", study)
+    stop("HuMMANet metadata entry not found: ", target)
+  }
+
+  source_url <- metadata_row$SourceUrl[[1]]
+  if (is.na(source_url) || !nzchar(source_url)) {
+    target <- if (is.null(study)) record_type else paste0(record_type, " for ", study)
+    stop("No SourceUrl available for HuMMANet metadata entry: ", target)
+  }
+
+  tmp <- tempfile(fileext = ".rds")
+  on.exit(unlink(tmp), add = TRUE)
+  utils::download.file(source_url, destfile = tmp, mode = "wb", quiet = TRUE)
+  readRDS(tmp)
 }
 
 # Internal helper: read the local study index.
@@ -500,6 +552,14 @@ HuMMANet_study_index <- function(extdata_dir = NULL, localHub = FALSE) {
     return(hub_index)
   }
 
+  remote_index <- tryCatch({
+    HuMMANet_load_remote_record(record_type = "study_index", extdata_dir = extdata_dir)
+  }, error = function(...) NULL)
+
+  if (!is.null(remote_index)) {
+    return(remote_index)
+  }
+
   HuMMANet_local_study_index(extdata_dir = extdata_dir)
 }
 
@@ -628,10 +688,20 @@ HuMMANet_load_study <- function(
   }, error = function(...) NULL)
 
   if (is.null(bundle)) {
+    bundle <- tryCatch({
+      HuMMANet_load_remote_record(
+        record_type = "study_bundle",
+        study = study,
+        extdata_dir = extdata_dir
+      )
+    }, error = function(...) NULL)
+  }
+
+  if (is.null(bundle)) {
     if (!HuMMANet_local_data_available()) {
       stop(
         "Study ", study, " is not available locally and no published ",
-        "HuMMANet ExperimentHub resource could be retrieved."
+        "HuMMANet ExperimentHub or remote source resource could be retrieved."
       )
     }
 
