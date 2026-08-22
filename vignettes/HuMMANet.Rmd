@@ -137,15 +137,6 @@ library(MultiAssayExperiment)
 library(SummarizedExperiment)
 ```
 
-## Connect to ExperimentHub
-
-```{r connect-hub, eval = FALSE}
-hub <- HuMMANetHub()
-hub
-```
-
-In a published Bioconductor release, `HuMMANetHub()` is the main entry point to
-the remote resources.
 
 ## Discover available studies
 

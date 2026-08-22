@@ -158,10 +158,7 @@ HuMMANet_fetch_hub <- function(localHub = FALSE) {
   package_col <- intersect(c("Package", "package"), hub_cols)
 
   if (length(package_col) == 0) {
-    stop(
-      "Could not find a package metadata column in the current ",
-      "ExperimentHub resource table."
-    )
+    return(hub[FALSE])
   }
 
   hub[hub[[package_col[[1]]]] == "HuMMANet"]

@@ -82,9 +82,6 @@ library(HuMMANet)
 library(MultiAssayExperiment)
 library(SummarizedExperiment)
 
-# inspect the HuMMANet ExperimentHub subset
-hub <- HuMMANetHub()
-hub
 
 # list all studies
 studies <- HuMMANet_studies()
