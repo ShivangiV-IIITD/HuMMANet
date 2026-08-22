@@ -10,6 +10,8 @@
 ^.*\.Rcheck/
 ^experimenthub$
 ^experimenthub/
+^HuMMANet$
+^HuMMANet/
 ^inst/extdata/studies$
 ^inst/extdata/studies/
 ^data-raw$

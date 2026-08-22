@@ -2,19 +2,19 @@
 
 ## Overview
 
-`HuMMANet` is designed as a Bioconductor data resource for paired human
-microbiome-metabolome studies. The package brings together study-level species
-profiles, metabolite profiles, matched sample metadata, and study-specific
-annotation resources in a consistent interface with data accessible through
-`ExperimentHub`.
+`HuMMANet` is a Bioconductor experiment data package for reproducible access to
+paired human microbiome-metabolome studies distributed through
+`ExperimentHub`. The package brings together study-level species profiles,
+original and harmonized metabolite profiles, matched sample metadata, and
+study-specific annotation resources through a consistent Bioconductor
+interface.
 
 The motivation for `HuMMANet` is to make paired species and metabolite datasets
 easier to discover, load, and analyze across studies without requiring users to
 manually reconcile sample identifiers, metabolite annotations, or study-level
-resource formats. By packaging these resources in a Bioconductor-friendly form,
-`HuMMANet` supports reproducible downstream analyses of microbiome-metabolome
-relationships, cross-study comparisons, and annotation-driven interpretation of
-metabolite features.
+resource formats. `HuMMANet` supports reproducible downstream analyses of
+microbiome-metabolome relationships, cross-study comparisons, and
+annotation-driven interpretation of metabolite features.
 
 Each study bundle can include the following modalities:
 
@@ -44,6 +44,16 @@ Each study bundle can include the following modalities:
   metabolites or mapped structures.
 - `drugCentralSimilarityMatches`: DrugCentral similarity matches for study
   metabolites or mapped structures.
+
+Each study is returned as a `MultiAssayExperiment`:
+
+- `colData()` stores the `MetadataProfile`
+- `experiments()` stores `taxaAbundanceProfile`,
+  `OriginalMetaboliteProfile`, and `harmonizedMetaboliteProfile` as
+  `SummarizedExperiment` objects
+- `metadata()` stores long-form annotation tables such as identifier mappings,
+  pathway annotations, disease associations, microbial producer annotations,
+  and drug similarity matches
 
 ## Install
 
@@ -109,6 +119,10 @@ class(one_study)
 names(experiments(one_study))
 nrow(colData(one_study))
 
+# inspect the sample metadata and assay containers
+colData(one_study)[1:3, 1:6]
+experiments(one_study)
+
 # load the harmonized metabolite profile for one study
 harmonized_profile <- HuMMANet_load_modality(
   "DawkinsJ_2022",
@@ -116,6 +130,7 @@ harmonized_profile <- HuMMANet_load_modality(
 )
 class(harmonized_profile)
 dim(assay(harmonized_profile))
+head(rowData(harmonized_profile)[, 1:6])
 
 # load an annotation table attached to the study object
 pathway_annotations <- HuMMANet_load_modality(
@@ -132,3 +147,7 @@ subset_data <- HuMMANet(
 names(subset_data)
 class(subset_data[[1]])
 ```
+
+See the vignette for a fuller walkthrough of study discovery, modality loading,
+and manipulation of the resulting `MultiAssayExperiment` and
+`SummarizedExperiment` objects.

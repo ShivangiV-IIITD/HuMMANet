@@ -1,0 +1,13 @@
+CHANGES IN VERSION 0.99.0
+--------------------------
+
+NEW FEATURES
+
+    o Initial Bioconductor submission of HuMMANet.
+
+    o Added ExperimentHub-backed access to curated paired human
+      microbiome-metabolome study resources.
+
+    o Added study-level loading through MultiAssayExperiment and
+      SummarizedExperiment containers together with annotation table
+      accessors.

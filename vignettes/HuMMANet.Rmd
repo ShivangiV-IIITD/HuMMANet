@@ -11,7 +11,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -35,11 +35,11 @@ hummanet_has_local_studies <- !is.null(hummanet_extdata_dir) &&
 
 ## Introduction
 
-`HuMMANet` is a Bioconductor data resource for paired human
+`HuMMANet` is a Bioconductor experiment data package for paired human
 microbiome-metabolome studies. It provides a unified interface to curated
-study-level species profiles, metabolite profiles, matched sample metadata, and
-study-specific annotation resources, with study data accessible through
-`ExperimentHub`.
+study-level species profiles, original and harmonized metabolite profiles,
+matched sample metadata, and study-specific annotation resources, with study
+data distributed through `ExperimentHub`.
 
 The central motivation for the package is to provide a reusable resource for
 paired study species and metabolite data together with supporting annotations,
@@ -116,14 +116,15 @@ Within each study object:
   annotation tables rather than sample-by-feature assay matrices.
 
 The package is structured as a lightweight `ExperimentHub` interface package.
-Large study bundles are published outside the source tarball, while the package
-ships accessor functions, metadata, and documentation.
+Large study bundles live outside the source tarball, while the package ships
+the accessor functions, metadata, and documentation needed to discover and load
+those resources reproducibly.
 
 ## Installation
 
 Install from Bioconductor:
 
-```{r eval = FALSE}
+```{r install-bioc, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
@@ -132,7 +133,7 @@ BiocManager::install("HuMMANet")
 
 Install the development version from GitHub:
 
-```{r eval = FALSE}
+```{r install-github, eval = FALSE}
 if (!requireNamespace("remotes", quietly = TRUE)) {
     install.packages("remotes")
 }
@@ -141,7 +142,7 @@ remotes::install_github("ShivangiV-IIITD/HuMMANet")
 
 ## Load the package
 
-```{r}
+```{r load-packages}
 library(HuMMANet)
 library(MultiAssayExperiment)
 library(SummarizedExperiment)
@@ -149,14 +150,19 @@ library(SummarizedExperiment)
 
 ## Connect to ExperimentHub
 
-```{r eval = FALSE}
+```{r connect-hub, eval = FALSE}
 hub <- HuMMANetHub()
 hub
 ```
 
+In a published Bioconductor release, `HuMMANetHub()` is the main entry point to
+the remote resources. During package development before the public
+`ExperimentHub` records are registered, the listing examples below can still be
+demonstrated from package metadata or local development files.
+
 ## Discover available studies
 
-```{r}
+```{r list-studies}
 studies <- HuMMANet_studies(extdata_dir = hummanet_extdata_dir)
 length(studies)
 head(studies)
@@ -169,7 +175,7 @@ object.
 
 ## Inspect the study index
 
-```{r}
+```{r study-index}
 idx <- HuMMANet_study_index(extdata_dir = hummanet_extdata_dir)
 head(
   idx[, c(
@@ -190,12 +196,13 @@ for a particular analysis.
 
 The study-loading examples below require either published HuMMANet
 `ExperimentHub` study bundles or a local development checkout that still
-contains `inst/extdata/studies`. Before the Zenodo-backed resources are
-published, those chunks are shown but not executed during package checks.
+contains `inst/extdata/studies`. To keep package checks stable before the
+records are formally registered in `ExperimentHub`, those chunks are shown but
+only evaluated when local study files are available.
 
 ## Load one study
 
-```{r eval = hummanet_has_local_studies}
+```{r load-study, eval = hummanet_has_local_studies}
 study_id <- idx$study[[1]]
 available <- HuMMANet_available_modalities(
   study_id,
@@ -219,7 +226,7 @@ those assays.
 
 ## Inspect the study structure
 
-```{r eval = hummanet_has_local_studies}
+```{r inspect-structure, eval = hummanet_has_local_studies}
 experiments(one_study)
 sampleMap(one_study)
 ```
@@ -232,7 +239,7 @@ shared study-level sample metadata.
 
 ## Load the study metadata
 
-```{r eval = hummanet_has_local_studies}
+```{r load-metadata, eval = hummanet_has_local_studies}
 metadata_profile <- HuMMANet_load_modality(
   study_id,
   "MetadataProfile",
@@ -248,7 +255,7 @@ custom joins or downstream analysis.
 
 ## Inspect the original metabolite profile
 
-```{r eval = hummanet_has_local_studies}
+```{r original-profile, eval = hummanet_has_local_studies}
 original_profile <- HuMMANet_load_modality(
   study_id,
   "OriginalMetaboliteProfile",
@@ -267,7 +274,7 @@ study-specific metabolite matrix while preserving its feature identities.
 
 ## Load the harmonized metabolite profile
 
-```{r eval = hummanet_has_local_studies}
+```{r harmonized-profile, eval = hummanet_has_local_studies}
 harmonized_profile <- HuMMANet_load_modality(
   study_id,
   "harmonizedMetaboliteProfile",
@@ -288,7 +295,7 @@ quantitative matrix.
 
 ## Inspect the taxa abundance profile
 
-```{r eval = hummanet_has_local_studies}
+```{r taxa-profile, eval = hummanet_has_local_studies}
 taxa_profile <- HuMMANet_load_modality(
   study_id,
   "taxaAbundanceProfile",
@@ -307,7 +314,7 @@ consistent across modalities.
 
 ## Load an annotation table
 
-```{r eval = hummanet_has_local_studies}
+```{r pathway-annotations, eval = hummanet_has_local_studies}
 pathway_annotations <- HuMMANet_load_modality(
   study_id,
   "metabolitePathwayAnnotations",
@@ -324,7 +331,7 @@ represented as annotations rather than sample-by-feature matrices.
 
 ## Inspect study-level annotation metadata
 
-```{r eval = hummanet_has_local_studies}
+```{r study-metadata-slot, eval = hummanet_has_local_studies}
 names(metadata(one_study))
 ```
 
@@ -335,7 +342,7 @@ container instead of managing separate tables manually.
 
 ## Extract assay matrices for downstream analysis
 
-```{r eval = hummanet_has_local_studies}
+```{r assay-matrices, eval = hummanet_has_local_studies}
 harm_mat <- assay(harmonized_profile)
 taxa_mat <- assay(taxa_profile)
 
@@ -350,7 +357,7 @@ and sample-level context required for reproducible analysis.
 
 ## Subset a study object
 
-```{r eval = hummanet_has_local_studies}
+```{r subset-study, eval = hummanet_has_local_studies}
 sample_keep <- rownames(colData(one_study))[seq_len(min(5, nrow(colData(one_study))))]
 study_subset <- one_study[, sample_keep]
 
@@ -365,7 +372,7 @@ table separately.
 
 ## Load multiple studies and modalities
 
-```{r eval = hummanet_has_local_studies}
+```{r multiple-studies, eval = hummanet_has_local_studies}
 selected_studies <- studies[seq_len(min(2, length(studies)))]
 multi <- HuMMANet(
     studies = selected_studies,
@@ -384,6 +391,6 @@ multiple studies while preserving the same container structure for each one.
 
 ## Session information
 
-```{r}
+```{r session-info}
 sessionInfo()
 ```

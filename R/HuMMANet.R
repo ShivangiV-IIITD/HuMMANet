@@ -413,6 +413,11 @@ HuMMANet_build_study_mae <- function(
 #' @param localHub Logical scalar passed to `ExperimentHub::ExperimentHub()`.
 #'
 #' @return An `ExperimentHub` subset filtered to `package == "HuMMANet"`.
+#' @examples
+#' if (interactive()) {
+#'   hub <- HuMMANetHub(localHub = TRUE)
+#'   hub
+#' }
 #' @export
 HuMMANetHub <- function(localHub = FALSE) {
   HuMMANet_fetch_hub(localHub = localHub)
@@ -427,6 +432,10 @@ HuMMANetHub <- function(localHub = FALSE) {
 #'   directory.
 #'
 #' @return A `data.frame` describing the HuMMANet records.
+#' @examples
+#' extdata_dir <- system.file("extdata", package = "HuMMANet")
+#' tbl <- HuMMANet_resource_table(extdata_dir = extdata_dir)
+#' head(tbl[, c("title", "record_type")])
 #' @export
 HuMMANet_resource_table <- function(localHub = FALSE, extdata_dir = NULL) {
   manifest <- HuMMANet_hub_manifest(extdata_dir = extdata_dir)
@@ -470,6 +479,10 @@ HuMMANet_resource_table <- function(localHub = FALSE, extdata_dir = NULL) {
 #'   when hub access is used.
 #'
 #' @return A `data.frame` with one row per study and modality file metadata.
+#' @examples
+#' extdata_dir <- system.file("extdata", package = "HuMMANet")
+#' idx <- HuMMANet_study_index(extdata_dir = extdata_dir)
+#' head(idx[, c("study", "study_slug")])
 #' @export
 HuMMANet_study_index <- function(extdata_dir = NULL, localHub = FALSE) {
   if (!is.null(extdata_dir)) {
@@ -495,6 +508,9 @@ HuMMANet_study_index <- function(extdata_dir = NULL, localHub = FALSE) {
 #' @inheritParams HuMMANet_study_index
 #'
 #' @return Character vector of study identifiers.
+#' @examples
+#' extdata_dir <- system.file("extdata", package = "HuMMANet")
+#' head(HuMMANet_studies(extdata_dir = extdata_dir))
 #' @export
 HuMMANet_studies <- function(extdata_dir = NULL, localHub = FALSE) {
   unique(HuMMANet_study_index(
@@ -509,6 +525,11 @@ HuMMANet_studies <- function(extdata_dir = NULL, localHub = FALSE) {
 #' @param study Study identifier (for example `"FranzosaE_2019"`).
 #'
 #' @return Character vector of public HuMMANet modality names.
+#' @examples
+#' extdata_dir <- system.file("extdata", package = "HuMMANet")
+#' if (dir.exists(file.path(extdata_dir, "studies"))) {
+#'   HuMMANet_available_modalities("WuY_2025", extdata_dir = extdata_dir)
+#' }
 #' @export
 HuMMANet_available_modalities <- function(
   study,
@@ -558,6 +579,17 @@ HuMMANet_available_modalities <- function(
 #' @param drop_missing If `TRUE`, missing modalities are omitted from output.
 #'
 #' @return A study-level `MultiAssayExperiment`.
+#' @examples
+#' extdata_dir <- system.file("extdata", package = "HuMMANet")
+#' if (dir.exists(file.path(extdata_dir, "studies"))) {
+#'   x <- HuMMANet_load_study(
+#'     "WuY_2025",
+#'     modalities = c("MetadataProfile", "harmonizedMetaboliteProfile"),
+#'     extdata_dir = extdata_dir
+#'   )
+#'   class(x)
+#'   names(MultiAssayExperiment::experiments(x))
+#' }
 #' @export
 HuMMANet_load_study <- function(
   study,
@@ -642,6 +674,16 @@ HuMMANet_load_study <- function(
 #'
 #' @return A `DataFrame`, `SummarizedExperiment`, annotation `data.frame`, or
 #'   `NULL` if missing and `allow_missing = TRUE`.
+#' @examples
+#' extdata_dir <- system.file("extdata", package = "HuMMANet")
+#' if (dir.exists(file.path(extdata_dir, "studies"))) {
+#'   md <- HuMMANet_load_modality(
+#'     "WuY_2025",
+#'     "MetadataProfile",
+#'     extdata_dir = extdata_dir
+#'   )
+#'   dim(md)
+#' }
 #' @export
 HuMMANet_load_modality <- function(
   study,
@@ -685,6 +727,16 @@ HuMMANet_load_modality <- function(
 #'
 #' @return Named list keyed by study, where each element is a
 #'   `MultiAssayExperiment`.
+#' @examples
+#' extdata_dir <- system.file("extdata", package = "HuMMANet")
+#' if (dir.exists(file.path(extdata_dir, "studies"))) {
+#'   out <- HuMMANet(
+#'     studies = "WuY_2025",
+#'     modalities = c("MetadataProfile", "OriginalMetaboliteProfile"),
+#'     extdata_dir = extdata_dir
+#'   )
+#'   names(out)
+#' }
 #' @export
 HuMMANet <- function(
   studies = NULL,

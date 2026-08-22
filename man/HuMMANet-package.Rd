@@ -8,7 +8,8 @@ curated paired human microbiome-metabolome studies. The package organizes
 matched sample metadata, species abundance profiles, original and
 harmonized metabolite profiles, and study-specific annotation resources
 including metabolite identifier mappings, microbial producer annotations,
-disease associations, pathway annotations, and drug similarity matches.
+disease associations, pathway annotations, and drug similarity matches
+through Bioconductor \code{ExperimentHub}.
 }
 \details{
 Study resources are designed to support reproducible access to paired
@@ -23,6 +24,10 @@ accessors such as
 \code{\link{HuMMANetHub}}, \code{\link{HuMMANet_studies}},
 \code{\link{HuMMANet_study_index}}, \code{\link{HuMMANet_load_modality}},
 and \code{\link{HuMMANet_load_study}}.
+}
+\value{
+This help page documents the HuMMANet package as a whole and does not
+return a value.
 }
 \seealso{
 \code{\link{HuMMANet}}, \code{\link{HuMMANetHub}},
